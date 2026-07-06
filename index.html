@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Brands OS — Command Center</title>
+<style>
+:root{
+  --bg:#F2F5F4; --surface:#FFFFFF; --surface-2:#EAEFED; --line:#DCE4E1; --line-soft:#E7EDEA;
+  --ink:#1A2422; --ink-2:#4F5F5A; --ink-3:#7E8C88;
+  --accent:#0E6F63; --accent-ink:#FFFFFF; --accent-soft:#DFEEEA; --accent-line:#B9D8D1;
+  --good:#1E7A4E; --good-soft:#DFF0E6; --warn:#96690A; --warn-soft:#F6ECD2; --crit:#B23A31; --crit-soft:#F8E4E1;
+  --rail:#132320; --rail-2:#1B2E2A; --rail-ink:#AFC2BC; --rail-ink-dim:#6C817B; --rail-accent:#43D6BF;
+  --shadow:0 1px 2px rgba(18,32,29,.06),0 4px 14px rgba(18,32,29,.05);
+  --sans:"Avenir Next","Seravek","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0C1311; --surface:#141D1A; --surface-2:#1B2622; --line:#25332E; --line-soft:#1F2C27;
+    --ink:#E3ECE9; --ink-2:#A4B4AF; --ink-3:#6F7F7A;
+    --accent:#3CC7B0; --accent-ink:#04211C; --accent-soft:#15302A; --accent-line:#2A4A42;
+    --good:#4EC58C; --good-soft:#12301F; --warn:#DCAA45; --warn-soft:#33290F; --crit:#E4766B; --crit-soft:#3A1B17;
+    --rail:#0A100E; --rail-2:#141F1B; --rail-ink:#9FB2AC; --rail-ink-dim:#5C6E68; --rail-accent:#3CC7B0;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1311; --surface:#141D1A; --surface-2:#1B2622; --line:#25332E; --line-soft:#1F2C27;
+  --ink:#E3ECE9; --ink-2:#A4B4AF; --ink-3:#6F7F7A;
+  --accent:#3CC7B0; --accent-ink:#04211C; --accent-soft:#15302A; --accent-line:#2A4A42;
+  --good:#4EC58C; --good-soft:#12301F; --warn:#DCAA45; --warn-soft:#33290F; --crit:#E4766B; --crit-soft:#3A1B17;
+  --rail:#0A100E; --rail-2:#141F1B; --rail-ink:#9FB2AC; --rail-ink-dim:#5C6E68; --rail-accent:#3CC7B0;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.25);
+}
+:root[data-theme="light"]{
+  --bg:#F2F5F4; --surface:#FFFFFF; --surface-2:#EAEFED; --line:#DCE4E1; --line-soft:#E7EDEA;
+  --ink:#1A2422; --ink-2:#4F5F5A; --ink-3:#7E8C88;
+  --accent:#0E6F63; --accent-ink:#FFFFFF; --accent-soft:#DFEEEA; --accent-line:#B9D8D1;
+  --good:#1E7A4E; --good-soft:#DFF0E6; --warn:#96690A; --warn-soft:#F6ECD2; --crit:#B23A31; --crit-soft:#F8E4E1;
+  --rail:#132320; --rail-2:#1B2E2A; --rail-ink:#AFC2BC; --rail-ink-dim:#6C817B; --rail-accent:#43D6BF;
+  --shadow:0 1px 2px rgba(18,32,29,.06),0 4px 14px rgba(18,32,29,.05);
+}
+*{box-sizing:border-box}
+#app{display:flex;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* ---------- rail ---------- */
+.rail{width:224px;flex:0 0 224px;background:var(--rail);color:var(--rail-ink);padding:18px 0 28px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin}
+.rail-logo{display:flex;align-items:center;gap:10px;padding:2px 18px 14px;color:#fff}
+.rail-logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--rail-accent),#1C8A77);display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:12px;color:#06211C}
+.rail-logo .word{font-weight:600;letter-spacing:.16em;font-size:12.5px}
+.rail-group{padding:10px 0 2px}
+.rail-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--rail-ink-dim);padding:4px 18px 6px;text-transform:uppercase}
+.rail button.nav{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:5.5px 18px;color:var(--rail-ink);font-size:13px;border-left:2px solid transparent}
+.rail button.nav:hover{background:var(--rail-2);color:#fff}
+.rail button.nav.active{background:var(--rail-2);color:#fff;border-left-color:var(--rail-accent)}
+.rail button.nav .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.rail button.nav .cnt{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--rail-ink-dim)}
+.rail button.nav.active .cnt{color:var(--rail-accent)}
+.rail .sub{padding-left:30px;font-size:12.5px}
+
+/* ---------- main / topbar ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:10px 24px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.crumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;white-space:nowrap}
+.search{flex:1;max-width:440px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;color:var(--ink-3)}
+.search input{border:none;background:none;flex:1;color:var(--ink);font-family:inherit;font-size:13px}
+.search input::placeholder{color:var(--ink-3)}
+.search kbd{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink-3)}
+.topbar .spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:7px;border-radius:8px;padding:7px 14px;font-weight:600;font-size:13px}
+.btn-accent{background:var(--accent);color:var(--accent-ink)}
+.btn-accent:hover{filter:brightness(1.07)}
+.btn-ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink-2)}
+.btn-ghost:hover{border-color:var(--accent-line);color:var(--ink)}
+.iconbtn{position:relative;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:grid;place-items:center}
+.iconbtn .bubble{position:absolute;top:-5px;right:-5px;background:var(--crit);color:#fff;font-family:var(--mono);font-size:9.5px;border-radius:8px;padding:0 4px;line-height:14px}
+
+/* ---------- views ---------- */
+.view{display:none;padding:22px 24px 60px;max-width:1240px;width:100%;margin:0 auto}
+.view.active{display:block}
+.vhead{margin:2px 0 18px}
+.vhead h1{margin:0;font-size:21px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+.vhead .sub{color:var(--ink-2);font-size:13px;margin-top:3px;max-width:64ch}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 10px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card h3 .cnt{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);font-weight:400}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1080px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:680px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+/* stat tiles */
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow)}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.stat .d{font-size:11.5px;color:var(--ink-2);margin-top:1px}
+.stat .v .unit{font-size:13px;font-weight:600;color:var(--ink-3);margin-left:2px}
+.stat.alert .v{color:var(--crit)}
+
+/* pills & chips */
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:1.5px 9px;font-size:11px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.plain::before{display:none}
+.p-good{background:var(--good-soft);color:var(--good)}
+.p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-crit{background:var(--crit-soft);color:var(--crit)}
+.p-acc{background:var(--accent-soft);color:var(--accent)}
+.p-mut{background:var(--surface-2);color:var(--ink-2)}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 13px;font-size:12.5px;color:var(--ink-2)}
+.chip:hover{border-color:var(--accent-line)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.chip .n{font-family:var(--mono);font-size:10.5px;opacity:.75;margin-left:4px}
+
+/* tables */
+.twrap{overflow-x:auto}
+table.data{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+table.data th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:500;padding:7px 12px;border-bottom:1px solid var(--line)}
+table.data td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.data tr:last-child td{border-bottom:none}
+table.data tr:hover td{background:var(--surface-2)}
+table.data .t{font-weight:600}
+table.data .num{font-variant-numeric:tabular-nums}
+.due{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.due.today{color:var(--warn);font-weight:700}
+.due.over{color:var(--crit);font-weight:700}
+.owner{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.avatar{width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-family:var(--mono);font-size:9px;font-weight:700;display:inline-grid;place-items:center;flex:0 0 20px}
+
+/* lists */
+.rowlist{display:flex;flex-direction:column}
+.rowlist .row{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line-soft)}
+.rowlist .row:last-child{border-bottom:none}
+.rowlist .row .grow{flex:1;min-width:0}
+.rowlist .row .t{font-weight:600;font-size:13px}
+.rowlist .row .m{font-size:11.5px;color:var(--ink-3)}
+.sev{width:3px;align-self:stretch;border-radius:2px;flex:0 0 3px}
+.sev.crit{background:var(--crit)}.sev.warn{background:var(--warn)}.sev.acc{background:var(--accent)}
+
+/* health meter */
+.meter{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:3px}
+.meter.good i{background:var(--good)}.meter.warn i{background:var(--warn)}.meter.crit i{background:var(--crit)}
+
+/* brand cards */
+.brandcard{text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;transition:border-color .12s}
+.brandcard:hover{border-color:var(--accent-line)}
+.brandcard .top{display:flex;align-items:center;gap:10px}
+.brandcard .bmark{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:11px}
+.brandcard .name{font-weight:700;font-size:14px}
+.brandcard .tag{font-size:11.5px;color:var(--ink-3)}
+.brandcard .hrow{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.brandcard .stats{display:flex;gap:14px;font-size:11.5px;color:var(--ink-2)}
+.brandcard .stats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:0 0 18px;overflow-x:auto}
+.tabs button{padding:8px 13px;font-size:13px;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpane{display:none}
+.tabpane.on{display:block}
+
+/* kanban */
+.kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.kcol{flex:0 0 236px;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:12px;padding:10px}
+.kcol h4{margin:2px 4px 10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;justify-content:space-between}
+.kcard{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 11px;margin-bottom:8px;box-shadow:var(--shadow);font-size:12.5px}
+.kcard .t{font-weight:600;margin-bottom:5px;line-height:1.35}
+.kcard .meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.kcard .b{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(128px,1fr));gap:8px;overflow-x:auto}
+.calwrap{overflow-x:auto}
+.calday{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px;min-height:150px}
+.calday h5{margin:0 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:flex;justify-content:space-between}
+.calday h5 .d{color:var(--ink);font-size:12px}
+.calday.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.post{border-left:3px solid var(--accent);background:var(--surface-2);border-radius:6px;padding:5px 8px;margin-bottom:6px;font-size:11.5px;line-height:1.35}
+.post .pf{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);display:block}
+.post.warn{border-left-color:var(--warn)}
+.post.done{border-left-color:var(--good);opacity:.72}
+
+/* bars (charts) */
+.hbar{display:grid;grid-template-columns:110px 1fr 34px;align-items:center;gap:10px;padding:5px 0;font-size:12.5px}
+.hbar .lbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .trk{height:8px;border-radius:4px;background:var(--surface-2);position:relative}
+.hbar .trk i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--accent)}
+.hbar .val{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.cols{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.cols .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}
+.cols .c i{width:100%;max-width:34px;background:var(--accent);border-radius:4px 4px 0 0;display:block}
+.cols .c.dim i{background:var(--accent-soft)}
+.cols .c .w{font-family:var(--mono);font-size:9.5px;color:var(--ink-3)}
+.cols .c .v{font-family:var(--mono);font-size:10px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* misc */
+.note-callout{border:1px dashed var(--accent-line);background:var(--accent-soft);color:var(--ink-2);border-radius:10px;padding:11px 14px;font-size:12.5px;margin-top:16px}
+.note-callout b{color:var(--accent)}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:13px}
+.kv dt{color:var(--ink-3);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+.kv dd{margin:0}
+.fieldnote{font-size:12px;color:var(--ink-2)}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.toggle{width:34px;height:19px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);position:relative;flex:0 0 34px}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--ink-3);transition:left .12s,background .12s}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle.on::after{left:17px;background:var(--accent-ink)}
+
+/* quick add modal */
+.modal-scrim{position:fixed;inset:0;background:rgba(10,18,16,.5);display:none;align-items:flex-start;justify-content:center;padding:9vh 16px;z-index:100}
+.modal-scrim.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.3);padding:20px 22px}
+.modal h2{margin:0 0 4px;font-size:16px}
+.modal .hint{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.qa-types{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 11px;color:var(--ink);font-family:inherit;font-size:13px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal .actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px}
+
+/* responsive rail */
+@media (max-width:880px){
+  #app{flex-direction:column}
+  .rail{width:100%;flex:none;height:auto;position:static;flex-direction:row;align-items:center;overflow-x:auto;padding:8px 10px;gap:2px}
+  .rail-group{display:flex;align-items:center;padding:0}
+  .rail-h{display:none}
+  .rail button.nav{width:auto;white-space:nowrap;border-left:none;border-bottom:2px solid transparent;border-radius:6px;padding:5px 10px}
+  .rail button.nav.active{border-bottom-color:var(--rail-accent)}
+  .rail .sub{padding-left:10px}
+  .rail-logo{padding:0 10px 0 4px}
+  .rail-logo .word{display:none}
+  .cal{grid-template-columns:repeat(7,150px)}
+}
+@media (max-width:640px){
+  .topbar{flex-wrap:wrap;row-gap:8px}
+  .crumb{display:none}
+  .search{order:5;flex-basis:100%;max-width:none}
+  .view{padding:18px 14px 60px}
+}
+</style>
+<div id="app">
+<aside class="rail" aria-label="Main navigation">
+  <div class="rail-logo"><span class="mark">B/</span><span class="word">BRANDS OS</span></div>
+
+  <div class="rail-group">
+    <div class="rail-h">Command</div>
+    <button class="nav" data-view="command"><span class="dot" style="background:var(--rail-accent)"></span>Command Center</button>
+    <button class="nav" data-view="today">Today <span class="cnt">9</span></button>
+    <button class="nav" data-view="attention">Needs Attention <span class="cnt">11</span></button>
+    <button class="nav" data-view="inbox">Inbox <span class="cnt">7</span></button>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-h">Brands</div>
+    <button class="nav" data-view="brands">All Brands <span class="cnt">10</span></button>
+    <button class="nav sub" data-view="hq" data-brand="social">GHL Social</button>
+    <button class="nav sub" data-view="hq" data-brand="sites">GHL Sites</button>
+    <button class="nav sub" data-view="hq" data-brand="onboard">GHL Onboard</button>
+    <button class="nav sub" data-view="hq" data-brand="admins">GHL Admins</button>
+    <button class="nav sub" data-view="hq" data-brand="video">GHL Video</button>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-h">Operations</div>
+    <button class="nav" data-view="tasks">Tasks <span class="cnt">47</span></button>
+    <button class="nav" data-view="campaigns">Campaigns <span class="cnt">12</span></button>
+    <button class="nav" data-view="content">Content <span class="cnt">32</span></button>
+    <button class="nav" data-view="social">Social Calendar</button>
+    <button class="nav" data-view="assets">Assets</button>
+    <button class="nav" data-view="notes">Notes &amp; Decisions</button>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-h">Business</div>
+    <button class="nav" data-view="offers">Offers</button>
+    <button class="nav" data-view="crm">CRM Light</button>
+    <button class="nav" data-view="clients">Clients <span class="cnt">14</span></button>
+    <button class="nav" data-view="support">Support <span class="cnt">5</span></button>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-h">System</div>
+    <button class="nav" data-view="reports">Reports</button>
+    <button class="nav" data-view="automations">Automations</button>
+    <button class="nav" data-view="settings">Settings</button>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <span class="crumb" id="crumb">Command Center</span>
+    <div class="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search brands, tasks, campaigns, offers…" aria-label="Search"><kbd>/</kbd></div>
+    <span class="spacer"></span>
+    <button class="btn btn-accent" id="quickadd-open">+ Quick Add</button>
+    <button class="iconbtn" aria-label="Notifications, 3 unread">🔔<span class="bubble">3</span></button>
+    <button class="iconbtn" aria-label="Account: Dillon"><span class="avatar" style="width:22px;height:22px;font-size:9px">DL</span></button>
+  </header>
+
+  <!-- ============ COMMAND CENTER ============ -->
+  <section class="view active" id="view-command">
+    <div class="vhead">
+      <p class="eyebrow">GHL Brands · Parent Company</p>
+      <h1>Master Command Center</h1>
+      <div class="sub">Everything across all brands: what needs attention, who owns it, what is due, and how it connects to revenue.</div>
+    </div>
+
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Open Tasks</div><div class="v">47</div><div class="d">across 10 brands</div></div>
+      <div class="stat alert"><div class="k">Overdue</div><div class="v">11</div><div class="d">4 in GHL Social</div></div>
+      <div class="stat"><div class="k">Live Campaigns</div><div class="v">6</div><div class="d">3 more in build</div></div>
+      <div class="stat"><div class="k">Content Due · 7 Days</div><div class="v">32</div><div class="d">18 for GHL Social</div></div>
+    </div>
+
+    <div class="grid g2" style="margin-bottom:14px">
+      <div class="card">
+        <h3>Needs Attention <span class="cnt">11 items</span></h3>
+        <div class="rowlist">
+          <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">GHL Social — 4 posts overdue</div><div class="m">Real estate example set · owner: Team</div></div><span class="pill p-crit">Overdue</span></div>
+          <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">GHL Admins — campaign waiting on email list</div><div class="m">Reseller Push · blocked 3 days</div></div><span class="pill p-crit">Blocked</span></div>
+          <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">GHL Onboard — sales page needs final offer copy</div><div class="m">Launch scheduled July 14 · owner: Dillon</div></div><span class="pill p-warn">Due soon</span></div>
+          <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">GHL Sites — 2 client revisions pending</div><div class="m">Waiting on client feedback · 5 days</div></div><span class="pill p-warn">Waiting</span></div>
+          <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">GHL Social — SaaS promo emails need subject lines</div><div class="m">July SaaS Promo · owner: Dillon</div></div><span class="pill p-warn">Due soon</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-ghost" data-view="attention" style="font-size:12px;padding:5px 11px">View all 11 →</button></div>
+      </div>
+
+      <div class="card">
+        <h3>Brand Health <span class="cnt">10 brands</span></h3>
+        <div class="rowlist" id="health-list">
+          <div class="row"><div class="grow"><div class="t">GHL Sites</div><div class="meter good" style="margin-top:5px"><i style="width:88%"></i></div></div><span class="due num">88%</span><span class="pill p-good">Green</span></div>
+          <div class="row"><div class="grow"><div class="t">GHL Video</div><div class="meter good" style="margin-top:5px"><i style="width:82%"></i></div></div><span class="due num">82%</span><span class="pill p-good">Green</span></div>
+          <div class="row"><div class="grow"><div class="t">GHL Social</div><div class="meter warn" style="margin-top:5px"><i style="width:76%"></i></div></div><span class="due num">76%</span><span class="pill p-warn">Yellow</span></div>
+          <div class="row"><div class="grow"><div class="t">GHL Onboard</div><div class="meter warn" style="margin-top:5px"><i style="width:71%"></i></div></div><span class="due num">71%</span><span class="pill p-warn">Yellow</span></div>
+          <div class="row"><div class="grow"><div class="t">GHL Admins</div><div class="meter crit" style="margin-top:5px"><i style="width:54%"></i></div></div><span class="due num">54%</span><span class="pill p-crit">Red</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-ghost" data-view="brands" style="font-size:12px;padding:5px 11px">All brands →</button></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <h3>Today's Work <span class="cnt">Mon, July 6</span></h3>
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Task</th><th>Brand</th><th>Campaign</th><th>Owner</th><th>Priority</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr><td class="t">Finish SaaS email sequence</td><td>GHL Social</td><td>July SaaS Promo</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="due today">Today</span></td></tr>
+          <tr><td class="t">Review onboarding copy</td><td>GHL Onboard</td><td>Onboard Launch</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="due today">Today</span></td></tr>
+          <tr><td class="t">Publish real estate posts</td><td>GHL Social</td><td>Real Estate Social Offer</td><td><span class="owner"><span class="avatar">TM</span>Team</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="due today">Today</span></td></tr>
+          <tr><td class="t">Fix intake form redirect</td><td>GHL Sites</td><td>—</td><td><span class="owner"><span class="avatar">SM</span>Sam</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="due today">Today</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-bottom:14px">
+      <div class="card">
+        <h3>Live Campaigns <span class="cnt">6 live · 3 building</span></h3>
+        <div class="twrap">
+        <table class="data" style="min-width:0">
+          <thead><tr><th>Campaign</th><th>Brand</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="t">Real Estate Social Offer</td><td>GHL Social</td><td><span class="pill p-good">Live</span></td></tr>
+            <tr><td class="t">July SaaS Promo</td><td>GHL Social</td><td><span class="pill p-acc">Building</span></td></tr>
+            <tr><td class="t">5 Posts for $99 Promo</td><td>GHL Social</td><td><span class="pill p-acc">Building</span></td></tr>
+            <tr><td class="t">Reseller Push</td><td>GHL Brands</td><td><span class="pill p-mut">Planning</span></td></tr>
+            <tr><td class="t">Onboard Launch</td><td>GHL Onboard</td><td><span class="pill p-acc">Building</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Waiting On <span class="cnt">6 blocked items</span></h3>
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">Email list from data vendor</div><div class="m">Blocks: Reseller Push campaign</div></div><span class="pill p-mut">Vendor</span></div>
+          <div class="row"><div class="grow"><div class="t">Client feedback on homepage v2</div><div class="m">Blocks: Rivera Realty delivery</div></div><span class="pill p-mut">Client</span></div>
+          <div class="row"><div class="grow"><div class="t">Pricing sign-off for Custom Social</div><div class="m">Blocks: landing page, 3 posts</div></div><span class="pill p-mut">Dillon</span></div>
+          <div class="row"><div class="grow"><div class="t">Logo files from Beacon Home Co</div><div class="m">Blocks: onboarding checklist</div></div><span class="pill p-mut">Client</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Recent Activity</h3>
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">Real estate carousel approved</div><div class="m">Content · GHL Social · 22 min ago · Maya</div></div></div>
+          <div class="row"><div class="grow"><div class="t">Deal moved to Proposal — Summit Agency Co</div><div class="m">CRM · GHL Social · 1 h ago · Dillon</div></div></div>
+          <div class="row"><div class="grow"><div class="t">Campaign “5 Posts for $99” → Building</div><div class="m">Campaigns · GHL Social · 3 h ago · auto-created 6 tasks</div></div></div>
+          <div class="row"><div class="grow"><div class="t">Support ticket resolved — calendar embed</div><div class="m">Support · GHL Sites · 5 h ago · Alex</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Weekly Focus <span class="cnt">Week of July 6</span></h3>
+        <div class="rowlist">
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Ship 5 Posts for $99 promo</div><div class="m">GHL Social · funnel + emails + 5 example posts</div></div></div>
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Finalize GHL Onboard offer copy</div><div class="m">GHL Onboard · launch July 14</div></div></div>
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Unblock GHL Admins reseller campaign</div><div class="m">GHL Admins · list + first sequence</div></div></div>
+        </div>
+        <div class="note-callout"><b>One record, many views.</b> Every item above is a single record. It also appears in its Brand HQ, its campaign, its owner's workload, and this dashboard — nothing is duplicated.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TODAY ============ -->
+  <section class="view" id="view-today">
+    <div class="vhead"><p class="eyebrow">Command</p><h1>Today</h1><div class="sub">Everything due today, grouped by brand. Monday, July 6.</div></div>
+    <div class="card" style="margin-bottom:14px">
+      <h3>GHL Social <span class="cnt">5 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Finish SaaS email sequence</div><div class="m">Task · July SaaS Promo · Dillon</div></div><span class="pill p-crit plain">High</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Publish real estate posts (batch of 3)</div><div class="m">Social · Real Estate Social Offer · Team</div></div><span class="pill p-crit plain">High</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Review pricing block on landing page</div><div class="m">Task · 5 Posts for $99 Promo · Dillon</div></div><span class="pill p-warn plain">Medium</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Real estate carousel — final design pass</div><div class="m">Content · In Design · Maya</div></div><span class="pill p-warn plain">Medium</span></div>
+        <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Follow up: Summit Agency Co proposal</div><div class="m">CRM · Deal at Proposal · Dillon</div></div><span class="pill p-mut plain">Normal</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <h3>GHL Onboard <span class="cnt">2 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Review onboarding copy</div><div class="m">Task · Onboard Launch · Dillon</div></div><span class="pill p-warn plain">Medium</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Draft FAQ section for sales page</div><div class="m">Content · Onboard Launch · Jordan</div></div><span class="pill p-warn plain">Medium</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>GHL Sites <span class="cnt">2 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Fix intake form redirect</div><div class="m">Task · Technical · Sam</div></div><span class="pill p-warn plain">Medium</span></div>
+        <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Send recap to Rivera Realty</div><div class="m">Task · Meeting follow-up · Alex</div></div><span class="pill p-mut plain">Normal</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEEDS ATTENTION ============ -->
+  <section class="view" id="view-attention">
+    <div class="vhead"><p class="eyebrow">Command</p><h1>Needs Attention</h1><div class="sub">Overdue, blocked, and at-risk work across every brand — worst first.</div></div>
+    <div class="card" style="margin-bottom:14px">
+      <h3><span class="pill p-crit">Overdue</span> <span class="cnt">4 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">4 real estate posts past publish date</div><div class="m">GHL Social · Real Estate Social Offer · Team</div></div><span class="due over">3 days</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Reseller one-pager PDF</div><div class="m">GHL Brands · Reseller Push · Maya</div></div><span class="due over">2 days</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Migrate helpdesk macros</div><div class="m">GHL Helpdesk · Admin · Alex</div></div><span class="due over">1 day</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Invoice follow-up — Beacon Home Co</div><div class="m">GHL Sites · Billing · Dillon</div></div><span class="due over">1 day</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <h3><span class="pill p-crit">Blocked</span> <span class="cnt">3 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Reseller Push — first email send</div><div class="m">GHL Admins · waiting on email list from vendor · 3 days</div></div><span class="pill p-mut">Vendor</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Custom Social landing page</div><div class="m">GHL Social · waiting on pricing sign-off · 2 days</div></div><span class="pill p-mut">Dillon</span></div>
+        <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">Beacon Home Co onboarding</div><div class="m">GHL Sites · waiting on client logo files · 4 days</div></div><span class="pill p-mut">Client</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="pill p-warn">At Risk</span> <span class="cnt">4 items</span></h3>
+      <div class="rowlist">
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">GHL Onboard sales page — final offer copy</div><div class="m">Launch July 14 · copy not started</div></div><span class="due">Jul 10</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">SaaS promo email subject lines</div><div class="m">GHL Social · sequence otherwise complete</div></div><span class="due">Jul 8</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">GHL Admins — no content published in 12 days</div><div class="m">Content consistency factor dragging health score</div></div><span class="pill p-warn">Health</span></div>
+        <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">2 client revisions pending 5+ days</div><div class="m">GHL Sites · Rivera Realty, Beacon Home Co</div></div><span class="pill p-warn">Aging</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INBOX ============ -->
+  <section class="view" id="view-inbox">
+    <div class="vhead"><p class="eyebrow">Command</p><h1>Inbox</h1><div class="sub">Messy capture. Dump it here, process it later into a task, campaign, content item, note, or decision.</div></div>
+    <div class="card">
+      <div class="rowlist">
+        <div class="row"><div class="grow"><div class="t">Idea: “before/after” carousel series for GHL Sites portfolio</div><div class="m">Captured 2 h ago · via Quick Add</div></div><button class="chip">→ Content</button><button class="chip">→ Task</button></div>
+        <div class="row"><div class="grow"><div class="t">Screenshot — competitor's $79 social plan pricing page</div><div class="m">Captured yesterday · attachment</div></div><button class="chip">→ Note</button><button class="chip">→ Asset</button></div>
+        <div class="row"><div class="grow"><div class="t">Voice note from partner call — reseller wants white-label audit reports</div><div class="m">Captured yesterday · 1:42</div></div><button class="chip">→ Note</button><button class="chip">→ Deal</button></div>
+        <div class="row"><div class="grow"><div class="t">Client asked if we can run their newsletter too</div><div class="m">Rivera Realty · captured 2 days ago</div></div><button class="chip">→ Deal</button><button class="chip">→ Task</button></div>
+        <div class="row"><div class="grow"><div class="t">Campaign idea: “HighLevel agency starter kit” bundle</div><div class="m">Captured 3 days ago</div></div><button class="chip">→ Campaign</button><button class="chip">→ Note</button></div>
+        <div class="row"><div class="grow"><div class="t">Reminder: renew ghlsocial.com domain before Aug 1</div><div class="m">Captured 3 days ago</div></div><button class="chip">→ Task</button></div>
+        <div class="row"><div class="grow"><div class="t">Draft offer note: quarterly content audits as add-on</div><div class="m">Captured last week</div></div><button class="chip">→ Offer</button><button class="chip">→ Decision</button></div>
+      </div>
+      <div class="note-callout">Processing an item converts it into a real record with the five universal questions: <b>what is it, which brand, who owns it, when is it due, what is it related to.</b></div>
+    </div>
+  </section>
+
+  <!-- ============ BRANDS DIRECTORY ============ -->
+  <section class="view" id="view-brands">
+    <div class="vhead"><p class="eyebrow">Brands</p><h1>Brand Directory</h1><div class="sub">Every brand gets a complete HQ. Click a brand to open it.</div></div>
+    <div class="grid g3" id="brandgrid"></div>
+  </section>
+
+  <!-- ============ BRAND HQ ============ -->
+  <section class="view" id="view-hq">
+    <div class="vhead">
+      <p class="eyebrow">Brand HQ</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <h1 id="hq-name">GHL Social</h1>
+        <span class="pill p-good" id="hq-status">Active</span>
+        <span class="pill" id="hq-health">Yellow · 76%</span>
+      </div>
+      <div class="sub" id="hq-line">White-label social media content for HighLevel agencies, SaaS companies, and niche brands.</div>
+      <div style="display:flex;gap:18px;margin-top:8px;font-size:12px;color:var(--ink-2);flex-wrap:wrap">
+        <span><span class="eyebrow">Owner</span> &nbsp;<span id="hq-owner">Dillon</span></span>
+        <span><span class="eyebrow">Main Offer</span> &nbsp;<span id="hq-offer">Social Standard + Custom Social</span></span>
+        <span><span class="eyebrow">Audience</span> &nbsp;<span id="hq-aud">HighLevel SaaS, agencies, real estate</span></span>
+      </div>
+      <div class="fieldnote" id="hq-samplenote" style="display:none;margin-top:8px;color:var(--warn)">Mockup note: showing GHL Social sample data for this brand.</div>
+    </div>
+
+    <div class="tabs" data-group="hq">
+      <button class="on" data-pane="hq-overview">Overview</button>
+      <button data-pane="hq-brandiq">BrandIQ</button>
+      <button data-pane="hq-offers">Offers</button>
+      <button data-pane="hq-campaigns">Campaigns</button>
+      <button data-pane="hq-content">Content</button>
+      <button data-pane="hq-social">Social</button>
+      <button data-pane="hq-tasks">Tasks</button>
+      <button data-pane="hq-assets">Assets</button>
+      <button data-pane="hq-reports">Reports</button>
+    </div>
+
+    <div class="tabpane on" id="hq-overview" data-group="hq">
+      <div class="grid g4" style="margin-bottom:14px">
+        <div class="stat"><div class="k">Active Campaigns</div><div class="v">3</div></div>
+        <div class="stat"><div class="k">Content Due · 7d</div><div class="v">18</div></div>
+        <div class="stat alert"><div class="k">Overdue Tasks</div><div class="v">4</div></div>
+        <div class="stat"><div class="k">Open Deals</div><div class="v">7</div><div class="d">2 client issues open</div></div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <h3>Needs Attention</h3>
+          <div class="rowlist">
+            <div class="row"><span class="sev crit"></span><div class="grow"><div class="t">5 real estate examples need final review</div><div class="m">Blocks landing page launch</div></div></div>
+            <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">SaaS promo email sequence needs subject lines</div><div class="m">Due July 8 · Dillon</div></div></div>
+            <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Custom Social plan needs pricing block updated</div><div class="m">Waiting on pricing decision</div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Active Campaigns</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Real Estate Social Offer</div><div class="m">Landing page + examples + popup</div></div><span class="pill p-good">Live</span></div>
+            <div class="row"><div class="grow"><div class="t">July SaaS Promo</div><div class="m">Cold email + feature posts</div></div><span class="pill p-acc">Building</span></div>
+            <div class="row"><div class="grow"><div class="t">5 Posts for $99 Promo</div><div class="m">Funnel + email + 5 example posts</div></div><span class="pill p-acc">Building</span></div>
+          </div>
+          <div class="divider"></div>
+          <h3 style="margin-top:0">Upcoming Content</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Real estate carousel</div><div class="m">Mon · FB / IG / LI</div></div><span class="pill p-acc">In Design</span></div>
+            <div class="row"><div class="grow"><div class="t">SaaS feature graphic</div><div class="m">Tue · LinkedIn</div></div><span class="pill p-mut">Writing</span></div>
+            <div class="row"><div class="grow"><div class="t">HighLevel agency meme-style post</div><div class="m">Wed · IG / FB</div></div><span class="pill p-mut">Idea</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-brandiq" data-group="hq">
+      <div class="grid g2">
+        <div class="card">
+          <h3>Brand Summary</h3>
+          <dl class="kv">
+            <dt>One-liner</dt><dd>White-label social media content for HighLevel agencies, SaaS companies, and niche brands.</dd>
+            <dt>Positioning</dt><dd>Done-for-you content that looks custom, priced for agencies to resell at margin.</dd>
+            <dt>Audience</dt><dd>HighLevel SaaS companies · agencies · real estate programs · resellers</dd>
+          </dl>
+        </div>
+        <div class="card">
+          <h3>Tone &amp; Voice</h3>
+          <dl class="kv">
+            <dt>Sound like</dt><dd>Clear, confident, useful, lightly funny. Not corporate.</dd>
+            <dt>Avoid</dt><dd>Overexplaining HighLevel. Buzzwords. Sounding like generic social media management.</dd>
+            <dt>Visual rules</dt><dd>Bold type, brand teal + charcoal, real screenshots over stock photos.</dd>
+          </dl>
+        </div>
+        <div class="card">
+          <h3>Main Offers</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Social Standard</div><div class="m">Template-based monthly plan</div></div></div>
+            <div class="row"><div class="grow"><div class="t">Custom Social</div><div class="m">100% custom content plan</div></div></div>
+            <div class="row"><div class="grow"><div class="t">Reels add-on · Full-Time SMM · 5 posts for $99</div><div class="m">Add-ons and promos</div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Sales Angles</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">“Your clients ask for social. Stop turning that money away.”</div><div class="m">Agency resell angle</div></div></div>
+            <div class="row"><div class="grow"><div class="t">“Custom-looking content without hiring a designer.”</div><div class="m">SaaS / small team angle</div></div></div>
+            <div class="row"><div class="grow"><div class="t">Objection: “AI can do this free” → show example quality gap</div><div class="m">Handled in pricing FAQ</div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Links</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">ghlsocial.com</div><div class="m">Main site</div></div><span class="pill p-mut plain">Site</span></div>
+            <div class="row"><div class="grow"><div class="t">/real-estate</div><div class="m">Real estate landing page (live campaign)</div></div><span class="pill p-mut plain">Funnel</span></div>
+            <div class="row"><div class="grow"><div class="t">Booking calendar · intake form · client login</div><div class="m">Operational links</div></div><span class="pill p-mut plain">Ops</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Proof &amp; Internal Notes</h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">14 client examples tagged in Assets</div><div class="m">Best: real estate + SaaS feature sets</div></div></div>
+            <div class="row"><div class="grow"><div class="t">Internal: custom plan margin is thin under 2 revisions cap</div><div class="m">Team-only note</div></div></div>
+          </div>
+          <div class="note-callout">BrandIQ feeds the <b>Brief Generator</b> and AI copy assistant — tone, offers, and audience are pulled from here so every draft starts on-brand.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-offers" data-group="hq">
+      <div class="grid g3">
+        <div class="card"><h3>Social Standard <span class="pill p-good" style="margin-left:auto">Live</span></h3>
+          <dl class="kv" style="grid-template-columns:92px 1fr"><dt>Type</dt><dd>Plan</dd><dt>Price</dt><dd>$297/mo</dd><dt>Includes</dt><dd>12 posts/mo, template-based, 1 revision round</dd><dt>CTA</dt><dd>Buy plan</dd></dl></div>
+        <div class="card"><h3>Custom Social <span class="pill p-warn" style="margin-left:auto">Updating</span></h3>
+          <dl class="kv" style="grid-template-columns:92px 1fr"><dt>Type</dt><dd>Plan</dd><dt>Price</dt><dd>$597/mo</dd><dt>Includes</dt><dd>100% custom content, strategy call, 2 revision rounds</dd><dt>Note</dt><dd>Pricing block being finalized</dd></dl></div>
+        <div class="card"><h3>5 Posts for $99 <span class="pill p-acc" style="margin-left:auto">Promo</span></h3>
+          <dl class="kv" style="grid-template-columns:92px 1fr"><dt>Type</dt><dd>Promo</dd><dt>Price</dt><dd>$99 one-time</dd><dt>Goal</dt><dd>Trial → convert to Standard</dd><dt>Campaign</dt><dd>5 Posts for $99 Promo</dd></dl></div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-campaigns" data-group="hq">
+      <div class="card">
+        <div class="twrap">
+        <table class="data">
+          <thead><tr><th>Campaign</th><th>Offer</th><th>Goal</th><th>Status</th><th>Owner</th><th>Dates</th></tr></thead>
+          <tbody>
+            <tr><td class="t">Real Estate Social Offer</td><td>Social Standard</td><td>Booked calls</td><td><span class="pill p-good">Live</span></td><td>Dillon</td><td><span class="due">Jun 20 – Jul 31</span></td></tr>
+            <tr><td class="t">July SaaS Promo</td><td>Custom Social</td><td>Replies + meetings</td><td><span class="pill p-acc">Building</span></td><td>Dillon</td><td><span class="due">Jul 10 – Jul 31</span></td></tr>
+            <tr><td class="t">5 Posts for $99 Promo</td><td>5 Posts for $99</td><td>First-month buyers</td><td><span class="pill p-acc">Building</span></td><td>Dillon</td><td><span class="due">Jul 15 – Jul 31</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-content" data-group="hq">
+      <div class="kanban">
+        <div class="kcol"><h4>Idea <span>2</span></h4>
+          <div class="kcard"><div class="t">Agency meme-style post</div><div class="meta"><span class="pill p-mut plain">Social Post</span></div></div>
+          <div class="kcard"><div class="t">“What $99 gets you” breakdown</div><div class="meta"><span class="pill p-mut plain">Carousel</span></div></div></div>
+        <div class="kcol"><h4>Writing <span>2</span></h4>
+          <div class="kcard"><div class="t">SaaS feature graphic — caption</div><div class="meta"><span class="pill p-mut plain">Graphic</span><span class="due">Jul 8</span></div></div>
+          <div class="kcard"><div class="t">Promo email #3</div><div class="meta"><span class="pill p-mut plain">Email</span><span class="due">Jul 9</span></div></div></div>
+        <div class="kcol"><h4>In Design <span>2</span></h4>
+          <div class="kcard"><div class="t">Real estate offer carousel</div><div class="meta"><span class="pill p-mut plain">Carousel</span><span class="due today">Jul 10</span></div></div>
+          <div class="kcard"><div class="t">Pricing section graphics</div><div class="meta"><span class="pill p-mut plain">Graphic</span></div></div></div>
+        <div class="kcol"><h4>Review <span>1</span></h4>
+          <div class="kcard"><div class="t">5 real estate example posts</div><div class="meta"><span class="pill p-crit plain">Blocking launch</span></div></div></div>
+        <div class="kcol"><h4>Approved <span>1</span></h4>
+          <div class="kcard"><div class="t">Landing page hero copy</div><div class="meta"><span class="pill p-good plain">Ready</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-social" data-group="hq">
+      <div class="calwrap"><div class="cal">
+        <div class="calday today"><h5>Mon <span class="d">6</span></h5><div class="post warn"><span class="pf">FB · IG · LI</span>Real estate carousel</div><div class="post warn"><span class="pf">IG</span>Example post #1</div></div>
+        <div class="calday"><h5>Tue <span class="d">7</span></h5><div class="post"><span class="pf">LI</span>SaaS feature graphic</div></div>
+        <div class="calday"><h5>Wed <span class="d">8</span></h5><div class="post"><span class="pf">IG · FB</span>Agency meme-style post</div></div>
+        <div class="calday"><h5>Thu <span class="d">9</span></h5><div class="post"><span class="pf">Email</span>SaaS promo email #1</div></div>
+        <div class="calday"><h5>Fri <span class="d">10</span></h5><div class="post"><span class="pf">FB · IG · LI</span>Offer carousel goes live</div></div>
+        <div class="calday"><h5>Sat <span class="d">11</span></h5></div>
+        <div class="calday"><h5>Sun <span class="d">12</span></h5><div class="post"><span class="pf">IG</span>Client result screenshot</div></div>
+      </div></div>
+    </div>
+
+    <div class="tabpane" id="hq-tasks" data-group="hq">
+      <div class="card">
+        <div class="twrap">
+        <table class="data">
+          <thead><tr><th>Task</th><th>Campaign</th><th>Type</th><th>Owner</th><th>Status</th><th>Due</th></tr></thead>
+          <tbody>
+            <tr><td class="t">Write cold email sequence</td><td>July SaaS Promo</td><td>Content</td><td>Dillon</td><td><span class="pill p-acc">In Progress</span></td><td><span class="due">Jul 8</span></td></tr>
+            <tr><td class="t">Design 5 example posts</td><td>5 Posts for $99</td><td>Content</td><td>Maya</td><td><span class="pill p-acc">In Progress</span></td><td><span class="due">Jul 11</span></td></tr>
+            <tr><td class="t">Build promo funnel page</td><td>5 Posts for $99</td><td>Campaign</td><td>Sam</td><td><span class="pill p-mut">Planned</span></td><td><span class="due">Jul 12</span></td></tr>
+            <tr><td class="t">Update Custom Social pricing block</td><td>—</td><td>Strategy</td><td>Dillon</td><td><span class="pill p-crit">Blocked</span></td><td><span class="due over">Jul 3</span></td></tr>
+            <tr><td class="t">Publish real estate posts</td><td>Real Estate Social Offer</td><td>Content</td><td>Team</td><td><span class="pill p-crit">Overdue</span></td><td><span class="due over">Jul 3</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-assets" data-group="hq">
+      <div class="grid g4">
+        <div class="card"><h3>Brand Kit</h3><div class="fieldnote">Logo pack, colors, fonts, visual rules · updated Jun 28</div></div>
+        <div class="card"><h3>Real Estate Examples</h3><div class="fieldnote">14 example posts · 5 pending review</div></div>
+        <div class="card"><h3>Pricing Graphics</h3><div class="fieldnote">Standard + Custom blocks · v3 in design</div></div>
+        <div class="card"><h3>Landing Page Funnel</h3><div class="fieldnote">ghlsocial.com/real-estate · live</div></div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-reports" data-group="hq">
+      <div class="grid g2">
+        <div class="card">
+          <h3>Health Score · 76% <span class="pill p-warn" style="margin-left:auto">Yellow</span></h3>
+          <div class="hbar"><span class="lbl">Active campaigns</span><span class="trk"><i style="width:90%"></i></span><span class="val">A</span></div>
+          <div class="hbar"><span class="lbl">Content consistency</span><span class="trk"><i style="width:75%"></i></span><span class="val">B</span></div>
+          <div class="hbar"><span class="lbl">Task health</span><span class="trk"><i style="width:60%"></i></span><span class="val">C</span></div>
+          <div class="hbar"><span class="lbl">Sales activity</span><span class="trk"><i style="width:80%"></i></span><span class="val">B</span></div>
+          <div class="hbar"><span class="lbl">Asset readiness</span><span class="trk"><i style="width:65%"></i></span><span class="val">C</span></div>
+          <div class="hbar"><span class="lbl">Offer clarity</span><span class="trk"><i style="width:70%"></i></span><span class="val">B</span></div>
+        </div>
+        <div class="card">
+          <h3>What's Good / What Needs Attention</h3>
+          <div class="rowlist">
+            <div class="row"><span class="pill p-good">Good</span><div class="grow"><div class="t">Campaigns active, offer getting clearer, content production moving</div></div></div>
+            <div class="row"><span class="pill p-warn">Fix</span><div class="grow"><div class="t">Social examples not fully organized</div></div></div>
+            <div class="row"><span class="pill p-warn">Fix</span><div class="grow"><div class="t">Pricing blocks need final cleanup</div></div></div>
+            <div class="row"><span class="pill p-warn">Fix</span><div class="grow"><div class="t">Client delivery process needs better tracking</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ============ TASKS ============ -->
+  <section class="view" id="view-tasks">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Tasks</h1><div class="sub">One task, one record. Filters below are saved views — the same records grouped differently, never copies.</div></div>
+    <div class="chiprow" id="task-chips">
+      <button class="chip on" data-f="all">All <span class="n">14</span></button>
+      <button class="chip" data-f="mine">My Tasks <span class="n">6</span></button>
+      <button class="chip" data-f="today">Today <span class="n">4</span></button>
+      <button class="chip" data-f="blocked">Blocked <span class="n">2</span></button>
+      <button class="chip" data-f="waiting">Waiting <span class="n">2</span></button>
+      <button class="chip" data-f="overdue">Overdue <span class="n">3</span></button>
+    </div>
+    <div class="card">
+      <div class="twrap">
+      <table class="data" id="task-table">
+        <thead><tr><th>Task</th><th>Brand</th><th>Campaign</th><th>Type</th><th>Owner</th><th>Priority</th><th>Status</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr data-t="mine today"><td class="t">Finish SaaS email sequence</td><td>GHL Social</td><td>July SaaS Promo</td><td>Content</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due today">Today</span></td></tr>
+          <tr data-t="today"><td class="t">Publish real estate posts</td><td>GHL Social</td><td>Real Estate Social Offer</td><td>Content</td><td><span class="owner"><span class="avatar">TM</span>Team</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due today">Today</span></td></tr>
+          <tr data-t="mine today"><td class="t">Review onboarding copy</td><td>GHL Onboard</td><td>Onboard Launch</td><td>Content</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due today">Today</span></td></tr>
+          <tr data-t="today"><td class="t">Fix intake form redirect</td><td>GHL Sites</td><td>—</td><td>Technical</td><td><span class="owner"><span class="avatar">SM</span>Sam</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due today">Today</span></td></tr>
+          <tr data-t="mine"><td class="t">Write cold email sequence</td><td>GHL Social</td><td>July SaaS Promo</td><td>Content</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due">Jul 8</span></td></tr>
+          <tr data-t=""><td class="t">Design 5 example posts</td><td>GHL Social</td><td>5 Posts for $99</td><td>Content</td><td><span class="owner"><span class="avatar">MY</span>Maya</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-acc">In Progress</span></td><td><span class="due">Jul 11</span></td></tr>
+          <tr data-t=""><td class="t">Build promo funnel page</td><td>GHL Social</td><td>5 Posts for $99</td><td>Campaign</td><td><span class="owner"><span class="avatar">SM</span>Sam</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-mut">Planned</span></td><td><span class="due">Jul 12</span></td></tr>
+          <tr data-t="mine blocked"><td class="t">Update Custom Social pricing block</td><td>GHL Social</td><td>—</td><td>Strategy</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-crit">Blocked</span></td><td><span class="due over">Jul 3</span></td></tr>
+          <tr data-t="blocked"><td class="t">Send first reseller email</td><td>GHL Admins</td><td>Reseller Push</td><td>Campaign</td><td><span class="owner"><span class="avatar">JD</span>Jordan</span></td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-crit">Blocked</span></td><td><span class="due">Jul 9</span></td></tr>
+          <tr data-t="waiting"><td class="t">Homepage v2 revisions</td><td>GHL Sites</td><td>—</td><td>Client</td><td><span class="owner"><span class="avatar">SM</span>Sam</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-warn">Waiting</span></td><td><span class="due">Jul 10</span></td></tr>
+          <tr data-t="waiting"><td class="t">Beacon Home Co onboarding kickoff</td><td>GHL Sites</td><td>—</td><td>Client</td><td><span class="owner"><span class="avatar">AX</span>Alex</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-warn">Waiting</span></td><td><span class="due">Jul 11</span></td></tr>
+          <tr data-t="overdue"><td class="t">Reseller one-pager PDF</td><td>GHL Brands</td><td>Reseller Push</td><td>Asset</td><td><span class="owner"><span class="avatar">MY</span>Maya</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-crit">Overdue</span></td><td><span class="due over">Jul 4</span></td></tr>
+          <tr data-t="overdue"><td class="t">Migrate helpdesk macros</td><td>GHL Helpdesk</td><td>—</td><td>Admin</td><td><span class="owner"><span class="avatar">AX</span>Alex</span></td><td><span class="pill p-mut plain">Low</span></td><td><span class="pill p-crit">Overdue</span></td><td><span class="due over">Jul 5</span></td></tr>
+          <tr data-t="mine overdue"><td class="t">Invoice follow-up — Beacon Home Co</td><td>GHL Sites</td><td>—</td><td>Sales</td><td><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-crit">Overdue</span></td><td><span class="due over">Jul 5</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note-callout"><b>“Write cold email sequence”</b> is one record. It also shows in GHL Social HQ → Tasks, the July SaaS Promo campaign, Dillon's workload, and (when due) the Today view.</div>
+    </div>
+  </section>
+
+  <!-- ============ CAMPAIGNS ============ -->
+  <section class="view" id="view-campaigns">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Campaigns</h1><div class="sub">The growth engine. Each campaign connects a brand, an offer, an audience, and everything built for it.</div></div>
+    <div class="kanban" style="margin-bottom:22px">
+      <div class="kcol"><h4>Planning <span>3</span></h4>
+        <div class="kcard"><div class="t">Reseller Push</div><div class="meta"><span class="b">Brands</span><span class="due">Jul 20</span></div></div>
+        <div class="kcard"><div class="t">Webinar: Sell Social at Margin</div><div class="meta"><span class="b">Social</span><span class="due">Aug 5</span></div></div>
+        <div class="kcard"><div class="t">Audit Lead Magnet</div><div class="meta"><span class="b">Audit</span></div></div></div>
+      <div class="kcol"><h4>Building <span>3</span></h4>
+        <div class="kcard" style="border-color:var(--accent)"><div class="t">5 Posts for $99 Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 15</span></div></div>
+        <div class="kcard"><div class="t">July SaaS Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 10</span></div></div>
+        <div class="kcard"><div class="t">Onboard Launch</div><div class="meta"><span class="b">Onboard</span><span class="due">Jul 14</span></div></div></div>
+      <div class="kcol"><h4>Live <span>3</span></h4>
+        <div class="kcard"><div class="t">Real Estate Social Offer</div><div class="meta"><span class="b">Social</span><span class="pill p-good plain">Live</span></div></div>
+        <div class="kcard"><div class="t">Sites Portfolio Refresh</div><div class="meta"><span class="b">Sites</span><span class="pill p-good plain">Live</span></div></div>
+        <div class="kcard"><div class="t">Video Intro Offer</div><div class="meta"><span class="b">Video</span><span class="pill p-good plain">Live</span></div></div></div>
+      <div class="kcol"><h4>Monitoring <span>2</span></h4>
+        <div class="kcard"><div class="t">Helpdesk Beta Invites</div><div class="meta"><span class="b">Helpdesk</span></div></div>
+        <div class="kcard"><div class="t">Engineers Referral Ask</div><div class="meta"><span class="b">Engineers</span></div></div></div>
+      <div class="kcol"><h4>Complete <span>1</span></h4>
+        <div class="kcard"><div class="t">June Feature Posts</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Archived Jul 1</span></div></div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+        <p class="eyebrow" style="margin:0">Campaign Detail</p>
+        <span class="pill p-acc">Building</span>
+      </div>
+      <h3 style="font-size:16px;margin:6px 0 12px">5 Posts for $99 Promo</h3>
+      <div class="grid g4" style="margin-bottom:14px">
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Offer</dt><dd>5 posts for $99</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Audience</dt><dd>HighLevel agencies &amp; SaaS</dd><dt>Owner</dt><dd>Dillon</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Dates</dt><dd>Jul 15 – Jul 31</dd><dt>Channels</dt><dd>Email · LinkedIn · Social</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Goal</dt><dd>Book meetings, first-month buyers</dd><dt>CTA</dt><dd>Claim the $99 pack</dd></dl>
+      </div>
+      <div class="tabs" data-group="cmp">
+        <button class="on" data-pane="cmp-brief">Brief</button>
+        <button data-pane="cmp-tasks">Tasks</button>
+        <button data-pane="cmp-content">Content</button>
+        <button data-pane="cmp-perf">Performance</button>
+        <button data-pane="cmp-notes">Notes</button>
+      </div>
+      <div class="tabpane on" id="cmp-brief" data-group="cmp">
+        <p style="max-width:68ch;margin:0 0 10px">Low-friction trial offer: five custom example posts for $99, delivered in five business days. The pack proves quality fast and converts into Social Standard. Funnel page, three-email sequence, and five example posts by niche. Tone pulled from BrandIQ: clear, confident, lightly funny.</p>
+        <div class="fieldnote">Assets needed: funnel page · pricing graphic · 5 example posts · offer badge &nbsp;·&nbsp; Tracking: utm_campaign=5for99-jul</div>
+      </div>
+      <div class="tabpane" id="cmp-tasks" data-group="cmp">
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">Design 5 example posts</div><div class="m">Maya · due Jul 11</div></div><span class="pill p-acc">In Progress</span></div>
+          <div class="row"><div class="grow"><div class="t">Build promo funnel page</div><div class="m">Sam · due Jul 12</div></div><span class="pill p-mut">Planned</span></div>
+          <div class="row"><div class="grow"><div class="t">Write 3-email promo sequence</div><div class="m">Dillon · due Jul 12</div></div><span class="pill p-mut">Planned</span></div>
+          <div class="row"><div class="grow"><div class="t">Set up checkout + tracking</div><div class="m">Sam · due Jul 14</div></div><span class="pill p-mut">Planned</span></div>
+        </div>
+        <div class="fieldnote" style="margin-top:8px">Auto-created by the “campaign → Building” automation. Same records as the master task board.</div>
+      </div>
+      <div class="tabpane" id="cmp-content" data-group="cmp">
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">“What $99 gets you” carousel</div><div class="m">FB / IG / LI</div></div><span class="pill p-mut">Idea</span></div>
+          <div class="row"><div class="grow"><div class="t">Promo emails 1–3</div><div class="m">Email sequence</div></div><span class="pill p-mut">Writing</span></div>
+          <div class="row"><div class="grow"><div class="t">Funnel hero + pricing copy</div><div class="m">Landing page</div></div><span class="pill p-mut">Writing</span></div>
+        </div>
+      </div>
+      <div class="tabpane" id="cmp-perf" data-group="cmp">
+        <div class="grid g4">
+          <div class="stat"><div class="k">Leads</div><div class="v">—</div><div class="d">starts Jul 15</div></div>
+          <div class="stat"><div class="k">Replies</div><div class="v">—</div></div>
+          <div class="stat"><div class="k">Calls Booked</div><div class="v">—</div></div>
+          <div class="stat"><div class="k">Buyers</div><div class="v">—</div><div class="d">goal: 10</div></div>
+        </div>
+      </div>
+      <div class="tabpane" id="cmp-notes" data-group="cmp">
+        <p class="fieldnote" style="max-width:68ch">Jul 3 — decided to cap at one niche per buyer so examples stay specific. Jul 5 — checkout via existing Stripe link, no new tooling for V1.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTENT ============ -->
+  <section class="view" id="view-content">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Content</h1><div class="sub">Every piece of content — posts, carousels, emails, pages, scripts — moves through one pipeline.</div></div>
+    <div class="chiprow">
+      <button class="chip on">Board</button><button class="chip" data-view="social">Calendar</button><button class="chip">Library</button>
+      <span style="flex:1"></span>
+      <button class="chip">All brands ▾</button><button class="chip">All types ▾</button>
+    </div>
+    <div class="kanban" style="margin-bottom:18px">
+      <div class="kcol"><h4>Idea <span>3</span></h4>
+        <div class="kcard"><div class="t">Agency meme-style post</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Post</span></div></div>
+        <div class="kcard"><div class="t">“Before/after” site redesign series</div><div class="meta"><span class="b">Sites</span><span class="pill p-mut plain">Carousel</span></div></div>
+        <div class="kcard"><div class="t">Onboarding walkthrough script</div><div class="meta"><span class="b">Onboard</span><span class="pill p-mut plain">Script</span></div></div></div>
+      <div class="kcol"><h4>Writing <span>3</span></h4>
+        <div class="kcard"><div class="t">SaaS cold email sequence</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Email</span><span class="due">Jul 8</span></div></div>
+        <div class="kcard"><div class="t">Onboard sales page FAQ</div><div class="meta"><span class="b">Onboard</span><span class="pill p-mut plain">Page copy</span><span class="due today">Today</span></div></div>
+        <div class="kcard"><div class="t">Video intro offer ad copy</div><div class="meta"><span class="b">Video</span><span class="pill p-mut plain">Ad</span></div></div></div>
+      <div class="kcol"><h4>In Design <span>3</span></h4>
+        <div class="kcard" style="border-color:var(--accent)"><div class="t">Real estate offer carousel</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Carousel</span><span class="due">Jul 10</span></div></div>
+        <div class="kcard"><div class="t">Pricing section graphics</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Graphic</span></div></div>
+        <div class="kcard"><div class="t">Reseller one-pager</div><div class="meta"><span class="b">Brands</span><span class="pill p-crit plain">Overdue</span></div></div></div>
+      <div class="kcol"><h4>Review <span>2</span></h4>
+        <div class="kcard"><div class="t">5 real estate example posts</div><div class="meta"><span class="b">Social</span><span class="pill p-warn plain">Internal review</span></div></div>
+        <div class="kcard"><div class="t">Rivera Realty August posts</div><div class="meta"><span class="b">Social</span><span class="pill p-warn plain">Client review</span></div></div></div>
+      <div class="kcol"><h4>Approved <span>2</span></h4>
+        <div class="kcard"><div class="t">Landing page hero copy</div><div class="meta"><span class="b">Social</span><span class="pill p-good plain">→ Scheduled</span></div></div>
+        <div class="kcard"><div class="t">Case study: 3x reply rate</div><div class="meta"><span class="b">Social</span></div></div></div>
+      <div class="kcol"><h4>Published <span>2</span></h4>
+        <div class="kcard"><div class="t">June feature post set</div><div class="meta"><span class="b">Social</span><span class="due">Jun 30</span></div></div>
+        <div class="kcard"><div class="t">Sites portfolio page</div><div class="meta"><span class="b">Sites</span><span class="due">Jul 1</span></div></div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+        <p class="eyebrow" style="margin:0">Content Item</p><span class="pill p-acc">In Design</span>
+      </div>
+      <h3 style="font-size:16px;margin:6px 0 12px">Real Estate Social Offer Carousel</h3>
+      <div class="grid g4" style="margin-bottom:6px">
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Campaign</dt><dd>Real Estate Social Offer</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Format</dt><dd>Carousel</dd><dt>Channels</dt><dd>FB · IG · LinkedIn</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Owner</dt><dd>Maya (design)</dd><dt>Due</dt><dd>July 10</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>CTA</dt><dd>Book a call / claim plan</dd><dt>Approval</dt><dd>Internal → none needed from client</dd></dl>
+      </div>
+      <div class="fieldnote">Brief auto-drafted from BrandIQ tone + campaign goal. Caption and hashtags stored on the record; design file linked from Assets.</div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL ============ -->
+  <section class="view" id="view-social">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Social Calendar</h1><div class="sub">Planning and production first — V1 tracks status, captions, and creative. Direct publishing comes later.</div></div>
+    <div class="chiprow">
+      <button class="chip on">All brands</button><button class="chip">GHL Social</button><button class="chip">GHL Sites</button><button class="chip">GHL Video</button>
+      <span style="flex:1"></span><span class="fieldnote" style="align-self:center">Week of July 6 – 12</span>
+    </div>
+    <div class="calwrap"><div class="cal">
+      <div class="calday today"><h5>Mon <span class="d">6</span></h5>
+        <div class="post warn"><span class="pf">Social · FB IG LI</span>Real estate carousel</div>
+        <div class="post warn"><span class="pf">Social · IG</span>Example post #1</div></div>
+      <div class="calday"><h5>Tue <span class="d">7</span></h5>
+        <div class="post"><span class="pf">Social · LI</span>SaaS feature graphic</div>
+        <div class="post"><span class="pf">Sites · IG</span>Portfolio before/after</div></div>
+      <div class="calday"><h5>Wed <span class="d">8</span></h5>
+        <div class="post"><span class="pf">Social · IG FB</span>Agency meme-style post</div></div>
+      <div class="calday"><h5>Thu <span class="d">9</span></h5>
+        <div class="post"><span class="pf">Social · Email</span>SaaS promo email #1</div>
+        <div class="post"><span class="pf">Video · YT</span>Intro offer short</div></div>
+      <div class="calday"><h5>Fri <span class="d">10</span></h5>
+        <div class="post"><span class="pf">Social · FB IG LI</span>Offer carousel live</div></div>
+      <div class="calday"><h5>Sat <span class="d">11</span></h5></div>
+      <div class="calday"><h5>Sun <span class="d">12</span></h5>
+        <div class="post done"><span class="pf">Social · IG</span>Client result screenshot</div></div>
+    </div></div>
+    <div class="note-callout">Each chip is a Social Post record: platform, caption, creative link, campaign, approval notes, publish status. Amber stripe = overdue against publish date; green = approved &amp; scheduled.</div>
+  </section>
+
+  <!-- ============ OFFERS ============ -->
+  <section class="view" id="view-offers">
+    <div class="vhead"><p class="eyebrow">Business</p><h1>Offers</h1><div class="sub">One record per offer. Campaigns, sales pages, and posts all pull pricing and inclusions from here — update once, flag everything using the old copy.</div></div>
+    <div class="card">
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Offer</th><th>Brand</th><th>Type</th><th>Price</th><th>Billing</th><th>Status</th><th>Used By</th></tr></thead>
+        <tbody>
+          <tr><td class="t">Social Standard</td><td>GHL Social</td><td>Plan</td><td class="num">$297</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">2 campaigns</td></tr>
+          <tr><td class="t">Custom Social</td><td>GHL Social</td><td>Plan</td><td class="num">$597</td><td>Monthly</td><td><span class="pill p-warn">Updating</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">5 Posts for $99</td><td>GHL Social</td><td>Promo</td><td class="num">$99</td><td>One-time</td><td><span class="pill p-acc">Launching</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">Reels Add-On</td><td>GHL Social</td><td>Add-on</td><td class="num">$147</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">—</td></tr>
+          <tr><td class="t">Full-Time Social Manager</td><td>GHL Social</td><td>Service</td><td class="num">$1,497</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">—</td></tr>
+          <tr><td class="t">Site Build — Standard</td><td>GHL Sites</td><td>Service</td><td class="num">$997</td><td>Project</td><td><span class="pill p-good">Live</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">Onboard Accelerator</td><td>GHL Onboard</td><td>Program</td><td class="num">$1,997</td><td>Project</td><td><span class="pill p-acc">Launching</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">Reseller Program</td><td>GHL Brands</td><td>Program</td><td class="num">Rev share</td><td>—</td><td><span class="pill p-mut">Drafting</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">Video Intro Offer</td><td>GHL Video</td><td>Promo</td><td class="num">$197</td><td>One-time</td><td><span class="pill p-good">Live</span></td><td class="num">1 campaign</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note-callout">Custom Social was updated Jul 3 → the <b>“offer updated”</b> automation flagged 1 campaign and 3 content items still using old pricing copy.</div>
+    </div>
+  </section>
+
+  <!-- ============ CRM ============ -->
+  <section class="view" id="view-crm">
+    <div class="vhead"><p class="eyebrow">Business</p><h1>CRM Light</h1><div class="sub">Brand context for relationships — not a HighLevel replacement. HighLevel stays the system of record; this layer ties deals to brands and campaigns.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Open Deals</div><div class="v">19</div><div class="d">$21.4k monthly value</div></div>
+      <div class="stat"><div class="k">Active Conversations</div><div class="v">12</div></div>
+      <div class="stat"><div class="k">Follow-Up Queue</div><div class="v">8</div><div class="d">3 due today</div></div>
+      <div class="stat"><div class="k">Partner Pipeline</div><div class="v">4</div></div>
+    </div>
+    <div class="card">
+      <h3>Deals by Brand</h3>
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Deal</th><th>Company</th><th>Brand</th><th>Stage</th><th>Value</th><th>Next Step</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td class="t">Summit Agency Co — Custom Social</td><td>Summit Agency Co</td><td>GHL Social</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$597/mo</td><td>Follow up today</td><td>Dillon</td></tr>
+          <tr><td class="t">Northpeak SaaS — Standard ×3</td><td>Northpeak</td><td>GHL Social</td><td><span class="pill p-acc">Negotiation</span></td><td class="num">$891/mo</td><td>Send revised quote</td><td>Dillon</td></tr>
+          <tr><td class="t">Lakeview Realty — site + social</td><td>Lakeview Realty</td><td>GHL Sites</td><td><span class="pill p-mut">Discovery</span></td><td class="num">$1,294</td><td>Book scoping call</td><td>Alex</td></tr>
+          <tr><td class="t">Reseller: Growthline Agency</td><td>Growthline</td><td>GHL Brands</td><td><span class="pill p-mut">Qualifying</span></td><td class="num">Rev share</td><td>Send program deck</td><td>Dillon</td></tr>
+          <tr><td class="t">Onboard Accelerator — pilot</td><td>BrightPath SaaS</td><td>GHL Onboard</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$1,997</td><td>Waiting on reply · day 2</td><td>Dillon</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLIENTS ============ -->
+  <section class="view" id="view-clients">
+    <div class="vhead"><p class="eyebrow">Business</p><h1>Clients</h1><div class="sub">Paying customers with active delivery, billing, and support — separate from general contacts.</div></div>
+    <div class="card">
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Client</th><th>Brand / Service</th><th>Plan</th><th>Status</th><th>Renewal</th><th>Open Tasks</th><th>Issues</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td class="t">Rivera Realty</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-good">Active</span></td><td><span class="due">Aug 1</span></td><td class="num">3</td><td class="num">1</td><td>Alex</td></tr>
+          <tr><td class="t">Beacon Home Co</td><td>GHL Sites</td><td>Site Build</td><td><span class="pill p-warn">Attention</span></td><td><span class="due">—</span></td><td class="num">4</td><td class="num">1</td><td>Sam</td></tr>
+          <tr><td class="t">Northgate Fitness</td><td>GHL Social</td><td>Custom Social</td><td><span class="pill p-good">Active</span></td><td><span class="due">Jul 22</span></td><td class="num">2</td><td class="num">0</td><td>Maya</td></tr>
+          <tr><td class="t">BrightPath SaaS</td><td>GHL Onboard</td><td>Accelerator (pilot)</td><td><span class="pill p-acc">Onboarding</span></td><td><span class="due">—</span></td><td class="num">5</td><td class="num">0</td><td>Dillon</td></tr>
+          <tr><td class="t">Copper Kettle Café</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-crit">Churn Risk</span></td><td><span class="due over">Jul 12</span></td><td class="num">1</td><td class="num">1</td><td>Alex</td></tr>
+          <tr><td class="t">Hartley Legal</td><td>GHL Video</td><td>Intro Offer → Retainer</td><td><span class="pill p-good">Active</span></td><td><span class="due">Aug 15</span></td><td class="num">1</td><td class="num">0</td><td>Jordan</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUPPORT ============ -->
+  <section class="view" id="view-support">
+    <div class="vhead"><p class="eyebrow">Business</p><h1>Support</h1><div class="sub">One queue for issues across every brand — client requests, fulfillment problems, technical fixes.</div></div>
+    <div class="card">
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Ticket</th><th>Brand</th><th>Client</th><th>Type</th><th>Priority</th><th>Status</th><th>Owner</th><th>Due</th></tr></thead>
+        <tbody>
+          <tr><td class="t">Wrong logo on last 2 posts</td><td>GHL Social</td><td>Rivera Realty</td><td>Quality</td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-acc">In Progress</span></td><td>Maya</td><td><span class="due today">Today</span></td></tr>
+          <tr><td class="t">Homepage revision round 2</td><td>GHL Sites</td><td>Beacon Home Co</td><td>Client Request</td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-warn">Waiting on Client</span></td><td>Sam</td><td><span class="due">Jul 10</span></td></tr>
+          <tr><td class="t">Pause request — reviewing budget</td><td>GHL Social</td><td>Copper Kettle Café</td><td>Billing</td><td><span class="pill p-crit plain">High</span></td><td><span class="pill p-mut">Triaged</span></td><td>Dillon</td><td><span class="due">Jul 9</span></td></tr>
+          <tr><td class="t">Calendar embed not loading</td><td>GHL Sites</td><td>—</td><td>Technical</td><td><span class="pill p-warn plain">Medium</span></td><td><span class="pill p-good">Resolved</span></td><td>Alex</td><td><span class="due">Jul 5</span></td></tr>
+          <tr><td class="t">Login access for new team member</td><td>Client Portal</td><td>Northgate Fitness</td><td>Access</td><td><span class="pill p-mut plain">Low</span></td><td><span class="pill p-mut">New</span></td><td>Alex</td><td><span class="due">Jul 11</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note-callout">New ticket → the automation creates a linked task and notifies the owner. Unresolved high-priority tickets surface in <b>Needs Attention</b>.</div>
+    </div>
+  </section>
+
+  <!-- ============ ASSETS ============ -->
+  <section class="view" id="view-assets">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Assets</h1><div class="sub">The internal library. Everything searchable and attached to a brand, campaign, offer, or client.</div></div>
+    <div class="chiprow">
+      <button class="chip on">All</button><button class="chip">Brand Kits</button><button class="chip">Graphics</button><button class="chip">Video</button><button class="chip">Documents</button><button class="chip">Links</button><button class="chip">Sales Material</button><button class="chip">Swipe File</button>
+    </div>
+    <div class="grid g4">
+      <div class="card"><p class="eyebrow">Brand Kit</p><h3 style="margin:6px 0 4px">GHL Social Brand Kit</h3><div class="fieldnote">Logos, colors, fonts, visual rules</div><div class="m" style="margin-top:8px"><span class="pill p-good plain">Current</span> <span class="due">Jun 28</span></div></div>
+      <div class="card"><p class="eyebrow">Graphic Set</p><h3 style="margin:6px 0 4px">Real Estate Examples ×14</h3><div class="fieldnote">Campaign: Real Estate Social Offer</div><div class="m" style="margin-top:8px"><span class="pill p-warn plain">5 in review</span></div></div>
+      <div class="card"><p class="eyebrow">Sales Material</p><h3 style="margin:6px 0 4px">Reseller Program Deck</h3><div class="fieldnote">Campaign: Reseller Push · v2 draft</div><div class="m" style="margin-top:8px"><span class="pill p-acc plain">Drafting</span></div></div>
+      <div class="card"><p class="eyebrow">Funnel Link</p><h3 style="margin:6px 0 4px">/real-estate landing page</h3><div class="fieldnote">GHL Social · live · UTM tracked</div><div class="m" style="margin-top:8px"><span class="pill p-good plain">Live</span></div></div>
+      <div class="card"><p class="eyebrow">Video</p><h3 style="margin:6px 0 4px">Intro Offer Explainer (0:42)</h3><div class="fieldnote">GHL Video · used in 1 campaign</div><div class="m" style="margin-top:8px"><span class="pill p-good plain">Current</span></div></div>
+      <div class="card"><p class="eyebrow">Document</p><h3 style="margin:6px 0 4px">SOP: Client Content Approval</h3><div class="fieldnote">Docs / SOPs · owner: Alex</div><div class="m" style="margin-top:8px"><span class="due">Jun 12</span></div></div>
+      <div class="card"><p class="eyebrow">Client Asset</p><h3 style="margin:6px 0 4px">Rivera Realty logo pack</h3><div class="fieldnote">Client: Rivera Realty · GHL Social</div><div class="m" style="margin-top:8px"><span class="pill p-good plain">Current</span></div></div>
+      <div class="card"><p class="eyebrow">Swipe File</p><h3 style="margin:6px 0 4px">Competitor pricing pages ×6</h3><div class="fieldnote">Research · linked from 2 notes</div><div class="m" style="margin-top:8px"><span class="due">Jul 5</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ NOTES ============ -->
+  <section class="view" id="view-notes">
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Notes &amp; Decisions</h1><div class="sub">Messy thinking, meeting notes, and a decision log per brand — so nothing gets re-decided every week.</div></div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Recent Notes</h3>
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">Partner call — Growthline Agency</div><div class="m">Meeting note · Jul 5 · wants white-label audit reports → deal created</div></div><span class="pill p-mut plain">Meeting</span></div>
+          <div class="row"><div class="grow"><div class="t">Real estate offer — positioning draft</div><div class="m">Strategy note · Jul 3 · GHL Social</div></div><span class="pill p-mut plain">Strategy</span></div>
+          <div class="row"><div class="grow"><div class="t">Competitor teardown: $79 social plans</div><div class="m">Research · Jul 2 · linked swipe file</div></div><span class="pill p-mut plain">Research</span></div>
+          <div class="row"><div class="grow"><div class="t">Sales call recap — Northpeak SaaS</div><div class="m">Call summary · Jul 1 · objection: contract length</div></div><span class="pill p-mut plain">Call</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Decision Log <span class="cnt">GHL Social</span></h3>
+        <div class="rowlist">
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">Two primary plans only: Standard (template) + Custom (100% custom)</div><div class="m">Jul 2026 · Reason: cleaner than many confusing product names · Related: GHL Social offer structure</div></div></div>
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">$99 promo capped at one niche per buyer</div><div class="m">Jul 3 · Reason: examples stay specific enough to convert</div></div></div>
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">No direct publishing in V1 — plan &amp; produce first</div><div class="m">Jun 30 · Reason: scheduler complexity would slow the core build</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REPORTS ============ -->
+  <section class="view" id="view-reports">
+    <div class="vhead"><p class="eyebrow">Reporting</p><h1>Reports</h1><div class="sub">Not dashboards for their own sake — answers to operational questions.</div></div>
+    <div class="grid g2" style="margin-bottom:14px">
+      <div class="card">
+        <h3>Brand Health <span class="cnt">Which brands are healthy or stuck?</span></h3>
+        <div class="hbar"><span class="lbl">GHL Sites</span><span class="trk"><i style="width:88%"></i></span><span class="val">88</span></div>
+        <div class="hbar"><span class="lbl">GHL Helpdesk</span><span class="trk"><i style="width:85%"></i></span><span class="val">85</span></div>
+        <div class="hbar"><span class="lbl">GHL Video</span><span class="trk"><i style="width:82%"></i></span><span class="val">82</span></div>
+        <div class="hbar"><span class="lbl">GHL Engineers</span><span class="trk"><i style="width:79%"></i></span><span class="val">79</span></div>
+        <div class="hbar"><span class="lbl">GHL Social</span><span class="trk"><i style="width:76%"></i></span><span class="val">76</span></div>
+        <div class="hbar"><span class="lbl">GHL Onboard</span><span class="trk"><i style="width:71%"></i></span><span class="val">71</span></div>
+        <div class="hbar"><span class="lbl">GHL Chat</span><span class="trk"><i style="width:68%"></i></span><span class="val">68</span></div>
+        <div class="hbar"><span class="lbl">GHL Audit</span><span class="trk"><i style="width:61%"></i></span><span class="val">61</span></div>
+        <div class="hbar"><span class="lbl">GHL Admins</span><span class="trk"><i style="width:54%"></i></span><span class="val">54</span></div>
+      </div>
+      <div class="card">
+        <h3>Content Output <span class="cnt">Items published per week, all brands</span></h3>
+        <div class="cols" role="img" aria-label="Content published per week, last eight weeks: 9, 12, 8, 14, 11, 16, 13, and 7 so far this week">
+          <div class="c dim"><i style="height:45%"></i><span class="w">W1</span></div>
+          <div class="c dim"><i style="height:60%"></i><span class="w">W2</span></div>
+          <div class="c dim"><i style="height:40%"></i><span class="w">W3</span></div>
+          <div class="c dim"><i style="height:70%"></i><span class="w">W4</span></div>
+          <div class="c dim"><i style="height:55%"></i><span class="w">W5</span></div>
+          <div class="c dim"><i style="height:80%"></i><span class="w">W6</span></div>
+          <div class="c dim"><i style="height:65%"></i><span class="w">W7</span></div>
+          <div class="c"><i style="height:35%"></i><span class="v">7</span><span class="w">now</span></div>
+        </div>
+        <div class="fieldnote" style="margin-top:10px">13 published last week · 7 so far this week with 32 due — watch Thursday's batch.</div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Team Workload <span class="cnt">Open tasks per owner</span></h3>
+        <div class="hbar"><span class="lbl">Dillon</span><span class="trk"><i style="width:100%"></i></span><span class="val">14</span></div>
+        <div class="hbar"><span class="lbl">Maya</span><span class="trk"><i style="width:71%"></i></span><span class="val">10</span></div>
+        <div class="hbar"><span class="lbl">Sam</span><span class="trk"><i style="width:64%"></i></span><span class="val">9</span></div>
+        <div class="hbar"><span class="lbl">Alex</span><span class="trk"><i style="width:57%"></i></span><span class="val">8</span></div>
+        <div class="hbar"><span class="lbl">Jordan</span><span class="trk"><i style="width:43%"></i></span><span class="val">6</span></div>
+        <div class="fieldnote" style="margin-top:8px">Dillon holds 30% of open work — 5 of his 14 are review/sign-off gates blocking others.</div>
+      </div>
+      <div class="card">
+        <h3>Revenue Movement <span class="cnt">Which brands create opportunities?</span></h3>
+        <div class="twrap">
+        <table class="data" style="min-width:0">
+          <thead><tr><th>Brand</th><th>Open Deals</th><th>Pipeline</th><th>New This Week</th></tr></thead>
+          <tbody>
+            <tr><td class="t">GHL Social</td><td class="num">7</td><td class="num">$4.2k/mo</td><td class="num">+2</td></tr>
+            <tr><td class="t">GHL Sites</td><td class="num">4</td><td class="num">$5.1k</td><td class="num">+1</td></tr>
+            <tr><td class="t">GHL Onboard</td><td class="num">3</td><td class="num">$6.0k</td><td class="num">+1</td></tr>
+            <tr><td class="t">GHL Brands (resellers)</td><td class="num">4</td><td class="num">Rev share</td><td class="num">+1</td></tr>
+            <tr><td class="t">GHL Video</td><td class="num">1</td><td class="num">$0.8k</td><td class="num">—</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUTOMATIONS ============ -->
+  <section class="view" id="view-automations">
+    <div class="vhead"><p class="eyebrow">System</p><h1>Automations</h1><div class="sub">Practical, not gimmicky. Each rule is trigger → action; AI never changes statuses or mass-creates work without review.</div></div>
+    <div class="card">
+      <div class="rowlist">
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">New brand created → scaffold HQ, BrandIQ, asset sections, default views</div><div class="m">Ran 2× · last: GHL Helpdesk</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">Campaign → “Building” → create copy, design, funnel, tracking tasks</div><div class="m">Ran 3× this month · last: 5 Posts for $99</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">Task overdue → add to Needs Attention + notify owner</div><div class="m">11 items currently surfaced</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">Content approved → move to Scheduled + notify publisher</div><div class="m">Ran 6× this week</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">New client → create onboarding checklist for the brand's service</div><div class="m">Last: BrightPath SaaS · 5 tasks created</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">Support ticket created → linked task + owner notification</div><div class="m">Ran 5× this week</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle on" role="switch" aria-checked="true" aria-label="Enabled"></span><div class="grow"><div class="t">Offer updated → flag campaigns &amp; content using old copy</div><div class="m">Flagged 4 items after Custom Social change</div></div><span class="pill p-good plain">On</span></div>
+        <div class="row"><span class="toggle" role="switch" aria-checked="false" aria-label="Disabled"></span><div class="grow"><div class="t">Weekly review → AI brand summary to Command Center</div><div class="m">Draft — needs review before enabling</div></div><span class="pill p-mut plain">Off</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section class="view" id="view-settings">
+    <div class="vhead"><p class="eyebrow">System</p><h1>Settings</h1><div class="sub">Roles kept simple for V1 — owner, admin, and scoped access per brand.</div></div>
+    <div class="card">
+      <h3>Roles &amp; Permissions</h3>
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Member</th><th>Role</th><th>Brand Scope</th><th>Access</th></tr></thead>
+        <tbody>
+          <tr><td class="t"><span class="owner"><span class="avatar">DL</span>Dillon</span></td><td>Owner</td><td>All brands</td><td>Everything</td></tr>
+          <tr><td class="t"><span class="owner"><span class="avatar">MY</span>Maya</span></td><td>Designer</td><td>All brands</td><td>Assets, design tasks, content items</td></tr>
+          <tr><td class="t"><span class="owner"><span class="avatar">JD</span>Jordan</span></td><td>Content Producer</td><td>Social · Onboard · Video</td><td>Content, social, assigned tasks</td></tr>
+          <tr><td class="t"><span class="owner"><span class="avatar">SM</span>Sam</span></td><td>Technical</td><td>Sites · Engineers</td><td>Tasks, assets, integrations</td></tr>
+          <tr><td class="t"><span class="owner"><span class="avatar">AX</span>Alex</span></td><td>Support</td><td>All brands</td><td>Clients, support tickets, tasks</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note-callout">Later: Brand Manager, Sales, Client Viewer, and Contractor roles. Integrations (HighLevel, Drive, Stripe, Slack) connect here after the core workflow is proven.</div>
+    </div>
+  </section>
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ============ QUICK ADD ============ -->
+<div class="modal-scrim" id="qa-scrim" role="dialog" aria-modal="true" aria-labelledby="qa-title">
+  <div class="modal">
+    <h2 id="qa-title">Quick Add</h2>
+    <p class="hint">Capture anything from anywhere. Five questions keep the system clean.</p>
+    <div class="qa-types" id="qa-types">
+      <button class="chip on">Task</button><button class="chip">Content</button><button class="chip">Social Post</button><button class="chip">Campaign</button><button class="chip">Note</button><button class="chip">Asset</button><button class="chip">Deal</button><button class="chip">Client</button><button class="chip">Ticket</button><button class="chip">Decision</button>
+    </div>
+    <div class="field"><label for="qa-what">What is it?</label><input id="qa-what" type="text" placeholder="e.g. Write subject lines for SaaS promo emails"></div>
+    <div class="frow">
+      <div class="field"><label for="qa-brand">Brand</label><select id="qa-brand"><option>GHL Social</option><option>GHL Sites</option><option>GHL Onboard</option><option>GHL Admins</option><option>GHL Video</option><option>GHL Brands</option><option>Not sure — send to Inbox</option></select></div>
+      <div class="field"><label for="qa-owner">Owner</label><select id="qa-owner"><option>Dillon</option><option>Maya</option><option>Jordan</option><option>Sam</option><option>Alex</option><option>Team</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label for="qa-due">Due date</label><input id="qa-due" type="date"></div>
+      <div class="field"><label for="qa-rel">Related to</label><select id="qa-rel"><option>—</option><option>Campaign: July SaaS Promo</option><option>Campaign: 5 Posts for $99</option><option>Offer: Social Standard</option><option>Client: Rivera Realty</option></select></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="qa-cancel">Cancel</button>
+      <button class="btn btn-accent" id="qa-save">Add it</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var BRANDS = {
+    brands:  {name:"GHL Brands",  tag:"Parent company · programs & resellers", health:72, tier:"warn", owner:"Dillon", offer:"Reseller Program", aud:"Agencies & partners", line:"The parent company: programs, partnerships, and the reseller engine behind every GHL brand.", camps:1, tasks:3, sample:true},
+    social:  {name:"GHL Social",  tag:"White-label social content",            health:76, tier:"warn", owner:"Dillon", offer:"Social Standard + Custom Social", aud:"HighLevel SaaS, agencies, real estate", line:"White-label social media content for HighLevel agencies, SaaS companies, and niche brands.", camps:3, tasks:12, sample:false},
+    sites:   {name:"GHL Sites",   tag:"Website & funnel builds",               health:88, tier:"good", owner:"Sam",    offer:"Site Build — Standard", aud:"Local businesses via agencies", line:"Done-for-you websites and funnels built on HighLevel, delivered white-label.", camps:1, tasks:8, sample:true},
+    onboard: {name:"GHL Onboard", tag:"Client onboarding programs",            health:71, tier:"warn", owner:"Dillon", offer:"Onboard Accelerator", aud:"New HighLevel SaaS companies", line:"Onboarding programs that get HighLevel SaaS clients live, activated, and retained.", camps:1, tasks:6, sample:true},
+    admins:  {name:"GHL Admins",  tag:"Admin & VA services",                   health:54, tier:"crit", owner:"Jordan", offer:"Admin Retainer", aud:"Agency owners", line:"Trained HighLevel admins and VAs on retainer for agencies that need hands.", camps:1, tasks:5, sample:true},
+    video:   {name:"GHL Video",   tag:"Video & short-form content",            health:82, tier:"good", owner:"Jordan", offer:"Video Intro Offer", aud:"Agencies & local brands", line:"Short-form video, promos, and explainers produced for HighLevel agencies.", camps:1, tasks:4, sample:true},
+    chat:    {name:"GHL Chat",    tag:"Chat & conversation services",          health:68, tier:"warn", owner:"Alex",   offer:"Managed Chat", aud:"Service businesses", line:"Managed chat and conversation handling layered onto HighLevel inboxes.", camps:0, tasks:2, sample:true},
+    engineers:{name:"GHL Engineers",tag:"Custom builds & integrations",        health:79, tier:"good", owner:"Sam",    offer:"Build Sprint", aud:"SaaS companies & agencies", line:"Custom HighLevel builds, workflows, and integrations by specialist engineers.", camps:1, tasks:3, sample:true},
+    audit:   {name:"GHL Audit",   tag:"Account audits & cleanups",             health:61, tier:"warn", owner:"Dillon", offer:"Account Audit", aud:"Established HighLevel accounts", line:"Deep audits and cleanups for messy HighLevel accounts — findings become fix-it work.", camps:1, tasks:2, sample:true},
+    helpdesk:{name:"GHL Helpdesk",tag:"Support desk as a service",             health:85, tier:"good", owner:"Alex",   offer:"Helpdesk Beta", aud:"Agencies offloading support", line:"A white-label helpdesk so agencies can offer real support without staffing it.", camps:1, tasks:2, sample:true}
+  };
+  var TIER = {good:["Green","p-good"], warn:["Yellow","p-warn"], crit:["Red","p-crit"]};
+
+  var views = document.querySelectorAll(".view");
+  var navBtns = document.querySelectorAll(".rail .nav");
+  var crumb = document.getElementById("crumb");
+  var LABEL = {command:"Command Center",today:"Command · Today",attention:"Command · Needs Attention",inbox:"Command · Inbox",brands:"Brands",hq:"Brand HQ",tasks:"Operations · Tasks",campaigns:"Operations · Campaigns",content:"Operations · Content",social:"Operations · Social",assets:"Operations · Assets",notes:"Operations · Notes",offers:"Business · Offers",crm:"Business · CRM Light",clients:"Business · Clients",support:"Business · Support",reports:"Reporting",automations:"System · Automations",settings:"System · Settings"};
+
+  function go(view, brand){
+    views.forEach(function(v){ v.classList.toggle("active", v.id === "view-"+view); });
+    navBtns.forEach(function(b){
+      var on = b.dataset.view === view && (view !== "hq" || b.dataset.brand === brand || (!brand && !b.dataset.brand));
+      if (view === "hq" && !brand) on = false;
+      b.classList.toggle("active", on);
+    });
+    if (view === "hq") setBrand(brand || "social");
+    crumb.textContent = LABEL[view] || "Brands OS";
+    window.scrollTo(0,0);
+  }
+
+  function setBrand(key){
+    var b = BRANDS[key] || BRANDS.social;
+    document.getElementById("hq-name").textContent = b.name;
+    document.getElementById("hq-line").textContent = b.line;
+    document.getElementById("hq-owner").textContent = b.owner;
+    document.getElementById("hq-offer").textContent = b.offer;
+    document.getElementById("hq-aud").textContent = b.aud;
+    var h = document.getElementById("hq-health");
+    h.textContent = TIER[b.tier][0] + " · " + b.health + "%";
+    h.className = "pill " + TIER[b.tier][1];
+    document.getElementById("hq-samplenote").style.display = b.sample ? "block" : "none";
+    crumb.textContent = "Brand HQ · " + b.name;
+  }
+
+  // brand directory cards
+  var grid = document.getElementById("brandgrid");
+  Object.keys(BRANDS).forEach(function(key){
+    var b = BRANDS[key], t = TIER[b.tier];
+    var el = document.createElement("button");
+    el.className = "brandcard";
+    el.innerHTML =
+      '<div class="top"><span class="bmark">'+ b.name.replace("GHL ","").slice(0,2).toUpperCase() +'</span>'+
+      '<div><div class="name">'+ b.name +'</div><div class="tag">'+ b.tag +'</div></div>'+
+      '<span class="pill '+ t[1] +'" style="margin-left:auto">'+ t[0] +'</span></div>'+
+      '<div class="meter '+ b.tier +'"><i style="width:'+ b.health +'%"></i></div>'+
+      '<div class="hrow">Health '+ b.health +'% · Owner '+ b.owner +'</div>'+
+      '<div class="stats"><span><b>'+ b.camps +'</b> campaigns</span><span><b>'+ b.tasks +'</b> open tasks</span></div>';
+    el.addEventListener("click", function(){ go("hq", key); });
+    grid.appendChild(el);
+  });
+
+  // any element with data-view navigates
+  document.addEventListener("click", function(e){
+    var el = e.target.closest("[data-view]");
+    if (el) go(el.dataset.view, el.dataset.brand);
+  });
+
+  // tab groups
+  document.querySelectorAll(".tabs").forEach(function(bar){
+    var group = bar.dataset.group;
+    bar.querySelectorAll("button").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        bar.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b === btn); });
+        document.querySelectorAll('.tabpane[data-group="'+group+'"]').forEach(function(p){
+          p.classList.toggle("on", p.id === btn.dataset.pane);
+        });
+      });
+    });
+  });
+
+  // task filters
+  var chips = document.querySelectorAll("#task-chips .chip");
+  chips.forEach(function(chip){
+    chip.addEventListener("click", function(){
+      chips.forEach(function(c){ c.classList.toggle("on", c === chip); });
+      var f = chip.dataset.f;
+      document.querySelectorAll("#task-table tbody tr").forEach(function(tr){
+        tr.style.display = (f === "all" || (" "+tr.dataset.t+" ").indexOf(" "+f+" ") > -1) ? "" : "none";
+      });
+    });
+  });
+
+  // quick add
+  var scrim = document.getElementById("qa-scrim");
+  document.getElementById("quickadd-open").addEventListener("click", function(){
+    scrim.classList.add("open");
+    document.getElementById("qa-what").focus();
+  });
+  function closeQA(){ scrim.classList.remove("open"); }
+  document.getElementById("qa-cancel").addEventListener("click", closeQA);
+  document.getElementById("qa-save").addEventListener("click", closeQA);
+  scrim.addEventListener("click", function(e){ if (e.target === scrim) closeQA(); });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape") closeQA();
+    if (e.key === "/" && !e.target.closest("input,select,textarea")){
+      e.preventDefault();
+      document.querySelector(".search input").focus();
+    }
+  });
+  document.querySelectorAll("#qa-types .chip").forEach(function(chip){
+    chip.addEventListener("click", function(){
+      document.querySelectorAll("#qa-types .chip").forEach(function(c){ c.classList.toggle("on", c === chip); });
+    });
+  });
+
+  go("command");
+})();
+</script>
+</body>
+</html>
