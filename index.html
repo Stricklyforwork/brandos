@@ -1503,20 +1503,93 @@ table.data .num{font-variant-numeric:tabular-nums}
 
   <!-- ============ CLIENTS ============ -->
   <section class="view" id="view-clients">
-    <div class="vhead"><p class="eyebrow">Business</p><h1>Clients</h1><div class="sub">Paying customers with active delivery, billing, and support — separate from general contacts.</div></div>
-    <div class="card">
+    <div class="vhead"><p class="eyebrow">Business</p><h1>Clients</h1><div class="sub">Paying customers with active delivery, billing, and support — and the live status of whatever we're building or running for them right now.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Active Projects</div><div class="v">6</div><div class="d">across 5 brands</div></div>
+      <div class="stat"><div class="k">On Track</div><div class="v">4</div></div>
+      <div class="stat alert"><div class="k">At Risk / Behind</div><div class="v">2</div><div class="d">Beacon Home Co · Copper Kettle</div></div>
+      <div class="stat"><div class="k">Avg Time in Phase</div><div class="v">9<span class="unit">days</span></div><div class="d">Beacon stuck 14 days</div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
       <div class="twrap">
       <table class="data">
-        <thead><tr><th>Client</th><th>Brand / Service</th><th>Plan</th><th>Status</th><th>Renewal</th><th>Open Tasks</th><th>Issues</th><th>Owner</th></tr></thead>
+        <thead><tr><th>Client</th><th>Brand / Service</th><th>Plan</th><th>Project Phase</th><th>Renewal</th><th>Open Tasks</th><th>Issues</th><th>Owner</th></tr></thead>
         <tbody>
-          <tr><td class="t">Rivera Realty</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-good">Active</span></td><td><span class="due">Aug 1</span></td><td class="num">3</td><td class="num">1</td><td>Alex</td></tr>
-          <tr><td class="t">Beacon Home Co</td><td>GHL Sites</td><td>Site Build</td><td><span class="pill p-warn">Attention</span></td><td><span class="due">—</span></td><td class="num">4</td><td class="num">1</td><td>Sam</td></tr>
-          <tr><td class="t">Northgate Fitness</td><td>GHL Social</td><td>Custom Social</td><td><span class="pill p-good">Active</span></td><td><span class="due">Jul 22</span></td><td class="num">2</td><td class="num">0</td><td>Maya</td></tr>
-          <tr><td class="t">BrightPath SaaS</td><td>GHL Onboard</td><td>Accelerator (pilot)</td><td><span class="pill p-acc">Onboarding</span></td><td><span class="due">—</span></td><td class="num">5</td><td class="num">0</td><td>Dillon</td></tr>
-          <tr><td class="t">Copper Kettle Café</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-crit">Churn Risk</span></td><td><span class="due over">Jul 12</span></td><td class="num">1</td><td class="num">1</td><td>Alex</td></tr>
-          <tr><td class="t">Hartley Legal</td><td>GHL Video</td><td>Intro Offer → Retainer</td><td><span class="pill p-good">Active</span></td><td><span class="due">Aug 15</span></td><td class="num">1</td><td class="num">0</td><td>Jordan</td></tr>
+          <tr class="clientrow" data-client="rivera"><td class="t">Rivera Realty</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-good">Steady State</span><div class="meter good" style="margin-top:5px;width:90px"><i style="width:100%"></i></div></td><td><span class="due">Aug 1</span></td><td class="num">3</td><td class="num">1</td><td>Alex</td></tr>
+          <tr class="clientrow" data-client="beacon"><td class="t">Beacon Home Co</td><td>GHL Sites</td><td>Site Build</td><td><span class="pill p-warn">Build · Revisions</span><div class="meter warn" style="margin-top:5px;width:90px"><i style="width:65%"></i></div></td><td><span class="due">—</span></td><td class="num">4</td><td class="num">1</td><td>Sam</td></tr>
+          <tr class="clientrow" data-client="northgate"><td class="t">Northgate Fitness</td><td>GHL Social</td><td>Custom Social</td><td><span class="pill p-good">Steady State</span><div class="meter good" style="margin-top:5px;width:90px"><i style="width:95%"></i></div></td><td><span class="due">Jul 22</span></td><td class="num">2</td><td class="num">0</td><td>Maya</td></tr>
+          <tr class="clientrow" data-client="brightpath"><td class="t">BrightPath SaaS</td><td>GHL Onboard</td><td>Accelerator (pilot)</td><td><span class="pill p-acc">Onboarding · Week 1</span><div class="meter" style="margin-top:5px;width:90px;background:var(--surface-2)"><i style="width:25%;background:var(--accent)"></i></div></td><td><span class="due">—</span></td><td class="num">5</td><td class="num">0</td><td>Dillon</td></tr>
+          <tr class="clientrow" data-client="copper"><td class="t">Copper Kettle Café</td><td>GHL Social</td><td>Social Standard</td><td><span class="pill p-crit">Churn Risk</span><div class="meter crit" style="margin-top:5px;width:90px"><i style="width:40%"></i></div></td><td><span class="due over">Jul 12</span></td><td class="num">1</td><td class="num">1</td><td>Alex</td></tr>
+          <tr class="clientrow" data-client="hartley"><td class="t">Hartley Legal</td><td>GHL Video</td><td>Intro Offer → Retainer</td><td><span class="pill p-good">Steady State</span><div class="meter good" style="margin-top:5px;width:90px"><i style="width:100%"></i></div></td><td><span class="due">Aug 15</span></td><td class="num">1</td><td class="num">0</td><td>Jordan</td></tr>
         </tbody>
       </table>
+      </div>
+      <div class="fieldnote" style="margin-top:8px">Click a client to see their project detail — phase timeline, active deliverables, and blockers.</div>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow" style="margin:0 0 8px">Client Project Detail</p>
+      <div class="tabs" data-group="clientsel">
+        <button class="on" data-pane="clientsel-beacon">Beacon Home Co <span class="pill p-warn" style="margin-left:6px">At Risk</span></button>
+        <button data-pane="clientsel-rivera">Rivera Realty <span class="pill p-good" style="margin-left:6px">On Track</span></button>
+      </div>
+
+      <div class="tabpane on" id="clientsel-beacon" data-group="clientsel">
+        <div class="grid g4" style="margin-bottom:14px">
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Sites</dd><dt>Plan</dt><dd>Site Build — Standard</dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Owner</dt><dd>Sam</dd><dt>Started</dt><dd>Jun 18</dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Phase</dt><dd>Build · Revisions (65%)</dd><dt>Days in Phase</dt><dd>14 <span style="color:var(--crit)">· stuck</span></dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Target Launch</dt><dd>Jul 19 <span style="color:var(--warn)">· at risk</span></dd><dt>Billing</dt><dd>Milestone 2 overdue · $498</dd></dl>
+        </div>
+        <div class="grid g2">
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Project Phases</p>
+            <div class="rowlist">
+              <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Discovery &amp; scoping</div><div class="m">Jun 18 – Jun 22</div></div></div>
+              <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Wireframes approved</div><div class="m">Jun 23 – Jun 28</div></div></div>
+              <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Build &amp; revisions <span class="pill p-warn" style="margin-left:6px">Current · 14 days</span></div><div class="m">Started Jun 29 · homepage v2 sent Jul 1, no client reply in 5 days</div></div></div>
+              <div class="row" style="opacity:.55"><span class="check todo"></span><div class="grow"><div class="t">Client review &amp; signoff</div><div class="m">Blocked until revisions phase clears</div></div></div>
+              <div class="row" style="opacity:.55"><span class="check todo"></span><div class="grow"><div class="t">Launch &amp; handoff</div><div class="m">Target Jul 19</div></div></div>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Active Deliverables</p>
+            <div class="rowlist">
+              <div class="row"><div class="grow"><div class="t">Homepage v2</div><div class="m">Sent Jul 1 · client signoff pending</div></div><span class="pill p-crit">Blocked</span></div>
+              <div class="row"><div class="grow"><div class="t">Contact + booking page</div><div class="m">In build · Sam</div></div><span class="pill p-acc">In Progress</span></div>
+              <div class="row"><div class="grow"><div class="t">Copy pass on services page</div><div class="m">Waiting on homepage signoff first</div></div><span class="pill p-mut">Queued</span></div>
+            </div>
+            <div class="note-callout" style="margin-top:10px"><b>Why it's at risk:</b> homepage signoff (Business → Signoffs) has been open 5 days, which is holding the whole Build phase. Nudge sent Jul 5; escalates to the account owner at day 7.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabpane" id="clientsel-rivera" data-group="clientsel">
+        <div class="grid g4" style="margin-bottom:14px">
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Plan</dt><dd>Social Standard</dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Owner</dt><dd>Alex</dd><dt>Started</dt><dd>Feb 3</dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Phase</dt><dd>Steady State · month 6</dd><dt>Days in Phase</dt><dd>on cadence</dd></dl>
+          <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Renewal</dt><dd>Aug 1 · auto-renew</dd><dt>Billing</dt><dd>Current · $297 paid Jul 6</dd></dl>
+        </div>
+        <div class="grid g2">
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Monthly Cadence</p>
+            <div class="rowlist">
+              <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Content calendar sent</div><div class="m">Jul 1 · approved same day</div></div></div>
+              <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">12 posts scheduled</div><div class="m">Jul 3</div></div></div>
+              <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Mid-month check-in call <span class="pill p-mut" style="margin-left:6px">Current</span></div><div class="m">Due Jul 15</div></div></div>
+              <div class="row" style="opacity:.55"><span class="check todo"></span><div class="grow"><div class="t">Renewal touch</div><div class="m">Due Jul 25 · ahead of Aug 1 renewal</div></div></div>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Open Items</p>
+            <div class="rowlist">
+              <div class="row"><div class="grow"><div class="t">Wrong logo on 2 posts</div><div class="m">Support ticket · Maya fixing today</div></div><span class="pill p-acc">In Progress</span></div>
+              <div class="row"><div class="grow"><div class="t">Upsell: Reels add-on</div><div class="m">Flagged after strong post engagement</div></div><span class="pill p-mut">Opportunity</span></div>
+            </div>
+            <div class="note-callout" style="margin-top:10px">Healthy account: content on cadence, one minor open ticket, one upsell opportunity queued for the renewal conversation.</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1863,6 +1936,7 @@ table.data .num{font-variant-numeric:tabular-nums}
    ["Nimbus SaaS","Deal","pipeline"],["Vista Property Mgmt","Deal","pipeline"],
    ["Social99","Competitor","competition"],["AgencyContent Co","Competitor","competition"],
    ["Rivera Realty","Client","clients"],["Beacon Home Co","Client","clients"],["Copper Kettle Café","Client","clients"],
+   ["Northgate Fitness","Client","clients"],["BrightPath SaaS","Client","clients"],["Hartley Legal","Client","clients"],
    ["Failed payment — Copper Kettle","Transaction","transactions"],["Beacon Home Co invoice","Transaction","transactions"],
    ["Finish SaaS email sequence","Task","tasks"],["Write cold email sequence","Task","tasks"],
    ["Real estate examples — final review","Signoff","signoffs"],["Custom Social pricing block","Signoff","signoffs"],
@@ -1906,6 +1980,24 @@ table.data .num{font-variant-numeric:tabular-nums}
     npanel.hidden = !npanel.hidden;
     nbtn.setAttribute("aria-expanded", String(!npanel.hidden));
     if (!npanel.hidden) document.getElementById("notif-bubble").style.display = "none";
+  });
+
+  // clients: row → project detail (Beacon + Rivera are fully modeled)
+  var CLIENT_DETAIL = {beacon:"clientsel-beacon", rivera:"clientsel-rivera"};
+  document.querySelectorAll(".clientrow").forEach(function(row){
+    row.style.cursor = "pointer";
+    row.addEventListener("click", function(){
+      var pane = CLIENT_DETAIL[row.dataset.client];
+      if (pane){
+        var btn = document.querySelector('.tabs[data-group="clientsel"] button[data-pane="'+pane+'"]');
+        if (btn){
+          btn.click();
+          document.querySelector('.tabs[data-group="clientsel"]').scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      } else {
+        say("Project detail for " + row.querySelector(".t").textContent + " — sample data covers Beacon Home Co and Rivera Realty in this mockup");
+      }
+    });
   });
 
   // campaigns: board / timeline toggle

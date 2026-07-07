@@ -28,7 +28,7 @@ several pages get a secondary tab strip under the top bar.
 | Campaigns | Stats, Board / Timeline (Gantt) toggle, playbooks, and deep detail for a Live and a Building campaign (funnel conversion, email sequence results, launch checklist, tasks, performance vs goal, notes); board cards link to their detail |
 | Content | Pipeline board + item detail (repurposing tracker, approval trail), Social Calendar |
 | Sales | Pipeline (deal stages w/ values), Products & Services (MRR, product record), Transactions (ledger + billing status), Competition (competitor records, positioning, watchlist) |
-| Business | CRM Light (contacts/prospects/partners), Clients, Support |
+| Business | CRM Light (contacts/prospects/partners), Clients (project-phase tracking per client with a phase-timeline + deliverables detail view), Support |
 | Library | Assets, Notes & Decisions |
 | Reports | Brand health, content output, workload, revenue |
 | System | Automations (text-to-automate composer with approval gate + active rules), Settings/Roles |
