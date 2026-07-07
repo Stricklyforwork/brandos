@@ -240,6 +240,23 @@ table.data .num{font-variant-numeric:tabular-nums}
 .cols .c .w{font-family:var(--mono);font-size:9.5px;color:var(--ink-3)}
 .cols .c .v{font-family:var(--mono);font-size:10px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 
+/* campaign timeline */
+.tl-row{display:grid;grid-template-columns:200px 1fr;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+.tl-row:last-child{border-bottom:none}
+.tl-label .t{font-weight:600;font-size:12.5px}
+.tl-label .m{font-size:11px;color:var(--ink-3)}
+.tl-track{position:relative;height:20px}
+.tl-track::before{content:"";position:absolute;left:0;right:0;top:9px;border-top:1px solid var(--line-soft)}
+.tl-bar{position:absolute;top:3px;height:14px;border-radius:7px;min-width:8px}
+.tl-bar.live{background:var(--good)}
+.tl-bar.building{background:repeating-linear-gradient(45deg,var(--accent) 0 5px,color-mix(in srgb,var(--accent) 45%,var(--surface)) 5px 10px)}
+.tl-bar.planning{background:var(--surface-2);border:1.5px dashed var(--ink-3)}
+.tl-today{position:absolute;top:-3px;bottom:-3px;left:37.5%;border-left:2px dashed var(--warn)}
+.tl-scale{position:relative;height:16px;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-bottom:4px}
+.tl-scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.tl-legend{display:flex;gap:14px;font-size:11.5px;color:var(--ink-2);margin-top:10px;flex-wrap:wrap}
+.tl-legend i{display:inline-block;width:14px;height:8px;border-radius:4px;vertical-align:middle;margin-right:5px}
+
 /* misc */
 .note-callout{border:1px dashed var(--accent-line);background:var(--accent-soft);color:var(--ink-2);border-radius:10px;padding:11px 14px;font-size:12.5px;margin-top:16px}
 .note-callout b{color:var(--accent)}
@@ -916,27 +933,72 @@ table.data .num{font-variant-numeric:tabular-nums}
       <div class="stat"><div class="k">Pipeline Influenced</div><div class="v">$8.6k</div><div class="d">deals sourced from campaigns</div></div>
       <div class="stat"><div class="k">MRR Added · 30d</div><div class="v">$2,673</div><div class="d">from campaign buyers</div></div>
     </div>
-    <div class="kanban" style="margin-bottom:22px">
-      <div class="kcol"><h4>Planning <span>3</span></h4>
-        <div class="kcard"><div class="t">Reseller Push</div><div class="meta"><span class="b">Brands</span><span class="due">Jul 20</span></div></div>
-        <div class="kcard"><div class="t">Webinar: Sell Social at Margin</div><div class="meta"><span class="b">Social</span><span class="due">Aug 5</span></div></div>
-        <div class="kcard"><div class="t">Audit Lead Magnet</div><div class="meta"><span class="b">Audit</span></div></div></div>
-      <div class="kcol"><h4>Building <span>3</span></h4>
-        <div class="kcard" style="border-color:var(--accent)"><div class="t">5 Posts for $99 Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 15</span></div></div>
-        <div class="kcard"><div class="t">July SaaS Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 10</span></div></div>
-        <div class="kcard"><div class="t">Onboard Launch</div><div class="meta"><span class="b">Onboard</span><span class="due">Jul 14</span></div></div></div>
-      <div class="kcol"><h4>Live <span>3</span></h4>
-        <div class="kcard"><div class="t">Real Estate Social Offer</div><div class="meta"><span class="b">Social</span><span class="pill p-good plain">Live</span></div></div>
-        <div class="kcard"><div class="t">Sites Portfolio Refresh</div><div class="meta"><span class="b">Sites</span><span class="pill p-good plain">Live</span></div></div>
-        <div class="kcard"><div class="t">Video Intro Offer</div><div class="meta"><span class="b">Video</span><span class="pill p-good plain">Live</span></div></div></div>
-      <div class="kcol"><h4>Monitoring <span>2</span></h4>
-        <div class="kcard"><div class="t">Helpdesk Beta Invites</div><div class="meta"><span class="b">Helpdesk</span></div></div>
-        <div class="kcard"><div class="t">Engineers Referral Ask</div><div class="meta"><span class="b">Engineers</span></div></div></div>
-      <div class="kcol"><h4>Complete <span>1</span></h4>
-        <div class="kcard"><div class="t">June Feature Posts</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Archived Jul 1</span></div></div></div>
+    <div class="chiprow" id="cmpview">
+      <button class="chip on" data-cv="cmp-board">Board</button>
+      <button class="chip" data-cv="cmp-timeline">Timeline</button>
+      <span style="flex:1"></span>
+      <button class="chip">All brands ▾</button>
+      <button class="chip">All types ▾</button>
     </div>
 
-    <p class="eyebrow" style="margin:0 0 8px">Campaign Detail</p>
+    <div id="cmp-board">
+    <div class="kanban" style="margin-bottom:22px">
+      <div class="kcol"><h4>Planning <span>3</span></h4>
+        <div class="kcard"><div class="t">Reseller Push</div><div class="meta"><span class="b">Brands</span><span class="due">Jul 20</span></div><div class="next">Blocked — waiting on email list from vendor</div></div>
+        <div class="kcard"><div class="t">Webinar: Sell Social at Margin</div><div class="meta"><span class="b">Social</span><span class="due">Aug 5</span></div><div class="next">Outline drafted · needs date + landing page</div></div>
+        <div class="kcard"><div class="t">Audit Lead Magnet</div><div class="meta"><span class="b">Audit</span></div><div class="next">Idea from Inbox · scope next week</div></div></div>
+      <div class="kcol"><h4>Building <span>3</span></h4>
+        <div class="kcard" style="border-color:var(--accent);cursor:pointer" data-cmpsel="cmpsel-build"><div class="t">5 Posts for $99 Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 15</span></div><div class="meter" style="margin-top:7px;background:var(--surface-2)"><i style="width:33%;background:var(--accent)"></i></div><div class="next">2/6 launch gates done · 9 days to launch</div></div>
+        <div class="kcard"><div class="t">July SaaS Promo</div><div class="meta"><span class="b">Social</span><span class="due">Jul 10</span></div><div class="meter" style="margin-top:7px;background:var(--surface-2)"><i style="width:60%;background:var(--accent)"></i></div><div class="next">Emails drafted · subject lines due Jul 8</div></div>
+        <div class="kcard"><div class="t">Onboard Launch</div><div class="meta"><span class="b">Onboard</span><span class="due">Jul 14</span></div><div class="meter" style="margin-top:7px;background:var(--surface-2)"><i style="width:70%;background:var(--accent)"></i></div><div class="next">Copy review today · sales page final copy open</div></div></div>
+      <div class="kcol"><h4>Live <span>3</span></h4>
+        <div class="kcard" style="cursor:pointer" data-cmpsel="cmpsel-live"><div class="t">Real Estate Social Offer</div><div class="meta"><span class="b">Social</span><span class="pill p-good plain">Live</span></div><div class="next">86 leads · 7 buyers · $2,079 MRR added</div></div>
+        <div class="kcard"><div class="t">Sites Portfolio Refresh</div><div class="meta"><span class="b">Sites</span><span class="pill p-good plain">Live</span></div><div class="next">12 inquiries · 2 moved to proposal</div></div>
+        <div class="kcard"><div class="t">Video Intro Offer</div><div class="meta"><span class="b">Video</span><span class="pill p-good plain">Live</span></div><div class="next">4 buyers · 1 converting to retainer</div></div></div>
+      <div class="kcol"><h4>Monitoring <span>2</span></h4>
+        <div class="kcard"><div class="t">Helpdesk Beta Invites</div><div class="meta"><span class="b">Helpdesk</span></div><div class="next">9 of 20 invites accepted · check-in Jul 18</div></div>
+        <div class="kcard"><div class="t">Engineers Referral Ask</div><div class="meta"><span class="b">Engineers</span></div><div class="next">3 referrals in pipeline · 1 at proposal</div></div></div>
+      <div class="kcol"><h4>Complete <span>1</span></h4>
+        <div class="kcard"><div class="t">June Feature Posts</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Archived Jul 1</span></div><div class="next">Recap snapshot saved to Reports</div></div></div>
+    </div>
+    </div>
+
+    <div id="cmp-timeline" style="display:none">
+    <div class="card" style="margin-bottom:22px">
+      <h3>July at a Glance <span class="cnt">Jun 15 – Aug 10 · dashed line = today</span></h3>
+      <div class="twrap"><div style="min-width:640px">
+      <div class="tl-row" style="border-bottom:none;padding-bottom:0"><div></div>
+        <div class="tl-scale"><span style="left:0%;transform:none">Jun 15</span><span style="left:28.6%">Jul 1</span><span style="left:53.6%">Jul 15</span><span style="left:83.9%">Aug 1</span></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Video Intro Offer</div><div class="m">GHL Video · Live</div></div><div class="tl-track"><i class="tl-bar live" style="left:0%;width:82%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Real Estate Social Offer</div><div class="m">GHL Social · Live</div></div><div class="tl-track"><i class="tl-bar live" style="left:8.9%;width:73.2%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Sites Portfolio Refresh</div><div class="m">GHL Sites · Live</div></div><div class="tl-track"><i class="tl-bar live" style="left:17.9%;width:44.6%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">July SaaS Promo</div><div class="m">GHL Social · Building</div></div><div class="tl-track"><i class="tl-bar building" style="left:44.6%;width:37.5%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Onboard Launch</div><div class="m">GHL Onboard · Building</div></div><div class="tl-track"><i class="tl-bar building" style="left:51.8%;width:44.6%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">5 Posts for $99 Promo</div><div class="m">GHL Social · Building</div></div><div class="tl-track"><i class="tl-bar building" style="left:53.6%;width:28.6%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Reseller Push</div><div class="m">GHL Brands · Planning</div></div><div class="tl-track"><i class="tl-bar planning" style="left:62.5%;width:37.5%"></i><i class="tl-today"></i></div></div>
+      <div class="tl-row"><div class="tl-label"><div class="t">Webinar: Sell Social at Margin</div><div class="m">GHL Social · Planning</div></div><div class="tl-track"><i class="tl-bar planning" style="left:83.9%;width:16.1%"></i><i class="tl-today"></i></div></div>
+      </div></div>
+      <div class="tl-legend">
+        <span><i style="background:var(--good)"></i>Live</span>
+        <span><i style="background:repeating-linear-gradient(45deg,var(--accent) 0 3px,transparent 3px 6px);border:1px solid var(--accent)"></i>Building</span>
+        <span><i style="background:var(--surface-2);border:1.5px dashed var(--ink-3)"></i>Planning</span>
+      </div>
+      <div class="fieldnote" style="margin-top:8px">Three GHL Social pushes overlap Jul 15–31 — the $99 promo, SaaS promo, and live RE campaign all compete for the same content team.</div>
+    </div>
+    </div>
+
+    <div class="card" style="margin-bottom:22px">
+      <h3>Playbooks <span class="cnt">start a campaign pre-structured</span></h3>
+      <div class="grid g4">
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px"><div style="font-weight:700;font-size:13px">Promo Launch</div><div class="fieldnote" style="margin:4px 0 10px">12-step checklist · funnel, emails, posts, tracking</div><button class="chip" data-playbook="Promo Launch">Use →</button></div>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px"><div style="font-weight:700;font-size:13px">Cold Email Campaign</div><div class="fieldnote" style="margin:4px 0 10px">9 steps · list, sequence, follow-up cadence</div><button class="chip" data-playbook="Cold Email Campaign">Use →</button></div>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px"><div style="font-weight:700;font-size:13px">Webinar / Event</div><div class="fieldnote" style="margin:4px 0 10px">14 steps · registration page, reminders, replay</div><button class="chip" data-playbook="Webinar / Event">Use →</button></div>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px"><div style="font-weight:700;font-size:13px">Client Campaign</div><div class="fieldnote" style="margin:4px 0 10px">7 steps · brief, approvals, delivery, recap</div><button class="chip" data-playbook="Client Campaign">Use →</button></div>
+      </div>
+      <div class="fieldnote" style="margin-top:10px">A playbook pre-fills the campaign's checklist, task set, and content slots — same records, no blank-page setup. Brief pulls from BrandIQ.</div>
+    </div>
+
+    <p class="eyebrow" style="margin:0 0 8px">Campaign Detail <span style="text-transform:none;letter-spacing:0">· click a board card or a tab</span></p>
     <div class="tabs" data-group="cmpsel">
       <button class="on" data-pane="cmpsel-live">Real Estate Social Offer <span class="pill p-good" style="margin-left:6px">Live</span></button>
       <button data-pane="cmpsel-build">5 Posts for $99 Promo <span class="pill p-acc" style="margin-left:6px">Building</span></button>
@@ -945,7 +1007,7 @@ table.data .num{font-variant-numeric:tabular-nums}
     <!-- live campaign: full depth -->
     <div class="tabpane on" id="cmpsel-live" data-group="cmpsel">
     <div class="card">
-      <h3 style="font-size:16px;margin:2px 0 12px">Real Estate Social Offer</h3>
+      <h3 style="font-size:16px;margin:2px 0 12px">Real Estate Social Offer <span class="pill p-good" style="margin-left:8px">Live · 25 days left</span><span class="pill p-mut plain" style="margin-left:6px">Playbook: Promo Launch</span></h3>
       <div class="grid g4" style="margin-bottom:14px">
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Product</dt><dd>Social Standard</dd></dl>
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Audience</dt><dd>Real estate agents &amp; teams</dd><dt>Owner</dt><dd>Dillon</dd></dl>
@@ -1045,7 +1107,8 @@ table.data .num{font-variant-numeric:tabular-nums}
     <!-- building campaign -->
     <div class="tabpane" id="cmpsel-build" data-group="cmpsel">
     <div class="card">
-      <h3 style="font-size:16px;margin:2px 0 12px">5 Posts for $99 Promo</h3>
+      <h3 style="font-size:16px;margin:2px 0 6px">5 Posts for $99 Promo <span class="pill p-acc" style="margin-left:8px">Building · launches in 9 days</span><span class="pill p-mut plain" style="margin-left:6px">Playbook: Promo Launch</span></h3>
+      <div style="display:flex;align-items:center;gap:10px;margin:0 0 12px;max-width:420px"><div class="meter" style="flex:1"><i style="width:33%;background:var(--accent)"></i></div><span class="due">2/6 launch gates</span></div>
       <div class="grid g4" style="margin-bottom:14px">
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Product</dt><dd>5 posts for $99</dd></dl>
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Audience</dt><dd>HighLevel agencies &amp; SaaS</dd><dt>Owner</dt><dd>Dillon</dd></dl>
@@ -1843,6 +1906,34 @@ table.data .num{font-variant-numeric:tabular-nums}
     npanel.hidden = !npanel.hidden;
     nbtn.setAttribute("aria-expanded", String(!npanel.hidden));
     if (!npanel.hidden) document.getElementById("notif-bubble").style.display = "none";
+  });
+
+  // campaigns: board / timeline toggle
+  document.querySelectorAll("#cmpview .chip[data-cv]").forEach(function(chip){
+    chip.addEventListener("click", function(){
+      document.querySelectorAll("#cmpview .chip[data-cv]").forEach(function(c){ c.classList.toggle("on", c === chip); });
+      ["cmp-board","cmp-timeline"].forEach(function(id){
+        document.getElementById(id).style.display = (id === chip.dataset.cv) ? "" : "none";
+      });
+    });
+  });
+
+  // campaigns: board card → open its detail
+  document.addEventListener("click", function(e){
+    var el = e.target.closest("[data-cmpsel]");
+    if (!el) return;
+    var btn = document.querySelector('.tabs[data-group="cmpsel"] button[data-pane="'+el.dataset.cmpsel+'"]');
+    if (btn){
+      btn.click();
+      btn.closest(".tabs").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+  });
+
+  // campaigns: playbooks
+  document.querySelectorAll("[data-playbook]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      say("New campaign drafted from the " + btn.dataset.playbook + " playbook — checklist, tasks, and content slots created");
+    });
   });
 
   // HQ overview cards can jump to another HQ tab
