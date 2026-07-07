@@ -198,6 +198,22 @@ table.data .num{font-variant-numeric:tabular-nums}
 .kcard .t{font-weight:600;margin-bottom:5px;line-height:1.35}
 .kcard .meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .kcard .b{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px}
+.kcard .val{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;margin-left:auto}
+.kcard .next{font-size:11px;color:var(--ink-3);margin-top:5px}
+
+/* checklist */
+.check{width:17px;height:17px;border-radius:50%;display:inline-grid;place-items:center;font-size:10px;flex:0 0 17px;font-weight:700}
+.check.done{background:var(--good-soft);color:var(--good)}
+.check.todo{border:1.5px dashed var(--ink-3)}
+.rowlist .row.donetask .t{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+
+/* funnel */
+.fstep{display:grid;grid-template-columns:110px 1fr 84px;align-items:center;gap:10px;padding:6px 0}
+.fstep .lbl{font-size:12.5px;color:var(--ink-2)}
+.fstep .trk{height:14px;border-radius:5px;background:var(--surface-2);position:relative}
+.fstep .trk i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--accent)}
+.fstep .val{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fstep .val b{color:var(--ink);font-size:12px}
 
 /* calendar */
 .cal{display:grid;grid-template-columns:repeat(7,minmax(128px,1fr));gap:8px;overflow-x:auto}
@@ -291,7 +307,8 @@ table.data .num{font-variant-numeric:tabular-nums}
   <div class="rail-sep" role="presentation"></div>
 
   <div class="rail-group">
-    <button class="nav" data-section="business" data-view="offers">Business</button>
+    <button class="nav" data-section="sales" data-view="pipeline">Sales <span class="cnt">19</span></button>
+    <button class="nav" data-section="business" data-view="crm">Business</button>
     <button class="nav" data-section="library" data-view="assets">Library</button>
     <button class="nav" data-section="reports" data-view="reports">Reports</button>
     <button class="nav" data-section="system" data-view="automations">System</button>
@@ -308,8 +325,8 @@ table.data .num{font-variant-numeric:tabular-nums}
       <button class="iconbtn" id="notif-btn" aria-label="Notifications, 3 unread" aria-expanded="false">🔔<span class="bubble" id="notif-bubble">3</span></button>
       <div class="npanel" id="npanel" hidden>
         <button data-view="attention"><b>4 posts overdue</b><span>GHL Social · Real Estate Social Offer</span></button>
-        <button data-view="offers"><b>Offer updated: Custom Social</b><span>4 items flagged with old pricing copy</span></button>
-        <button data-view="support"><b>New ticket: wrong logo on posts</b><span>Rivera Realty · high priority</span></button>
+        <button data-view="products"><b>Product updated: Custom Social</b><span>4 items flagged with old pricing copy</span></button>
+        <button data-view="transactions"><b>Payment failed: Copper Kettle Café</b><span>$297 subscription · card declined</span></button>
       </div>
     </div>
     <button class="iconbtn" aria-label="Account: Dillon"><span class="avatar" style="width:22px;height:22px;font-size:9px">DL</span></button>
@@ -396,6 +413,29 @@ table.data .num{font-variant-numeric:tabular-nums}
           <div class="row"><div class="grow"><div class="t">Pricing sign-off for Custom Social</div><div class="m">Blocks: landing page, 3 posts</div></div><span class="pill p-mut">Dillon</span></div>
           <div class="row"><div class="grow"><div class="t">Logo files from Beacon Home Co</div><div class="m">Blocks: onboarding checklist</div></div><span class="pill p-mut">Client</span></div>
         </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-bottom:14px">
+      <div class="card">
+        <h3>Sales Movement <span class="cnt">this week</span></h3>
+        <div class="rowlist">
+          <div class="row"><span class="pill p-good">Won</span><div class="grow"><div class="t">Nimbus SaaS — Social Standard ×2</div><div class="m">GHL Social · $594/mo · closed Jul 4</div></div><span class="due num">$594</span></div>
+          <div class="row"><span class="pill p-acc">Moved</span><div class="grow"><div class="t">Northpeak SaaS → Negotiation</div><div class="m">GHL Social · revised quote sent</div></div><span class="due num">$891</span></div>
+          <div class="row"><span class="pill p-acc">Moved</span><div class="grow"><div class="t">Summit Agency Co → Proposal</div><div class="m">GHL Social · follow-up due today</div></div><span class="due num">$597</span></div>
+          <div class="row"><span class="pill p-mut">New</span><div class="grow"><div class="t">Harbor Dental — site build inquiry</div><div class="m">GHL Sites · from intake form</div></div><span class="due num">$997</span></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-ghost" data-view="pipeline" style="font-size:12px;padding:5px 11px">Open pipeline →</button></div>
+      </div>
+      <div class="card">
+        <h3>Pipeline by Stage <span class="cnt">19 open · $14.9k</span></h3>
+        <div class="hbar"><span class="lbl">New</span><span class="trk"><i style="width:34%"></i></span><span class="val">3</span></div>
+        <div class="hbar"><span class="lbl">Qualified</span><span class="trk"><i style="width:48%"></i></span><span class="val">4</span></div>
+        <div class="hbar"><span class="lbl">Discovery</span><span class="trk"><i style="width:34%"></i></span><span class="val">3</span></div>
+        <div class="hbar"><span class="lbl">Proposal</span><span class="trk"><i style="width:100%"></i></span><span class="val">5</span></div>
+        <div class="hbar"><span class="lbl">Negotiation</span><span class="trk"><i style="width:24%"></i></span><span class="val">2</span></div>
+        <div class="hbar"><span class="lbl">Won · July</span><span class="trk"><i style="width:24%"></i></span><span class="val">2</span></div>
+        <div class="fieldnote" style="margin-top:8px">$6.2k weighted · win rate 38% · avg cycle 11 days. Proposal stage is stacking up — 3 of 5 waiting on us.</div>
       </div>
     </div>
 
@@ -525,7 +565,8 @@ table.data .num{font-variant-numeric:tabular-nums}
     <div class="tabs" data-group="hq">
       <button class="on" data-pane="hq-overview">Overview</button>
       <button data-pane="hq-brandiq">BrandIQ</button>
-      <button data-pane="hq-offers">Offers</button>
+      <button data-pane="hq-sales">Sales</button>
+      <button data-pane="hq-products">Products</button>
       <button data-pane="hq-campaigns">Campaigns</button>
       <button data-pane="hq-content">Content</button>
       <button data-pane="hq-social">Social</button>
@@ -611,6 +652,15 @@ table.data .num{font-variant-numeric:tabular-nums}
           </div>
         </div>
         <div class="card">
+          <h3>Competitors <span class="cnt">3 tracked</span></h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Social99 — $79–149 template plans</div><div class="m">Weakness: generic, no HighLevel focus · Our angle: niche examples + white-label</div></div></div>
+            <div class="row"><div class="grow"><div class="t">AgencyContent Co — $399+ custom</div><div class="m">Strength: design quality · Weakness: 7-day turnaround</div></div></div>
+            <div class="row"><div class="grow"><div class="t">DIY AI tools — free–$49</div><div class="m">Counter with example quality gap, handled in pricing FAQ</div></div></div>
+          </div>
+          <div style="margin-top:8px"><button class="btn btn-ghost" data-view="competition" style="font-size:12px;padding:5px 11px">Full competition view →</button></div>
+        </div>
+        <div class="card">
           <h3>Proof &amp; Internal Notes</h3>
           <div class="rowlist">
             <div class="row"><div class="grow"><div class="t">14 client examples tagged in Assets</div><div class="m">Best: real estate + SaaS feature sets</div></div></div>
@@ -621,7 +671,45 @@ table.data .num{font-variant-numeric:tabular-nums}
       </div>
     </div>
 
-    <div class="tabpane" id="hq-offers" data-group="hq">
+    <div class="tabpane" id="hq-sales" data-group="hq">
+      <div class="grid g4" style="margin-bottom:14px">
+        <div class="stat"><div class="k">Open Deals</div><div class="v">7</div><div class="d">$4.2k/mo pipeline</div></div>
+        <div class="stat"><div class="k">Won · July</div><div class="v">2</div><div class="d">$693/mo added</div></div>
+        <div class="stat"><div class="k">MRR</div><div class="v">$4,364</div><div class="d">from 8 subscriptions</div></div>
+        <div class="stat alert"><div class="k">At Risk</div><div class="v">1</div><div class="d">Copper Kettle · churn risk</div></div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <h3>Brand Pipeline <span class="cnt">GHL Social deals</span></h3>
+          <div class="twrap">
+          <table class="data" style="min-width:0">
+            <thead><tr><th>Deal</th><th>Stage</th><th>Value</th><th>Next Step</th></tr></thead>
+            <tbody>
+              <tr><td class="t">Northpeak SaaS ×3</td><td><span class="pill p-acc">Negotiation</span></td><td class="num">$891/mo</td><td>Send revised quote</td></tr>
+              <tr><td class="t">Summit Agency Co</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$597/mo</td><td>Follow up today</td></tr>
+              <tr><td class="t">Juniper Wellness</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$597/mo</td><td>Waiting on reply · day 3</td></tr>
+              <tr><td class="t">Anchor Legal</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$297/mo</td><td>Pricing question answered</td></tr>
+              <tr><td class="t">Fern &amp; Field Florist</td><td><span class="pill p-mut">Qualified</span></td><td class="num">$297/mo</td><td>Book discovery call</td></tr>
+              <tr><td class="t">Maple &amp; Main Realty</td><td><span class="pill p-mut">Discovery</span></td><td class="num">$297/mo</td><td>Send real estate examples</td></tr>
+              <tr><td class="t">Peak Perform Coaching</td><td><span class="pill p-mut">New</span></td><td class="num">$297/mo</td><td>First reply</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Recent Transactions <span class="cnt">GHL Social</span></h3>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Rivera Realty — Social Standard</div><div class="m">Jul 6 · subscription</div></div><span class="due num">$297</span><span class="pill p-good">Paid</span></div>
+            <div class="row"><div class="grow"><div class="t">Oak City Realty — 5 Posts promo</div><div class="m">Jul 5 · one-time</div></div><span class="due num">$99</span><span class="pill p-good">Paid</span></div>
+            <div class="row"><div class="grow"><div class="t">Northgate Fitness — Custom Social</div><div class="m">Jul 3 · subscription</div></div><span class="due num">$597</span><span class="pill p-good">Paid</span></div>
+            <div class="row"><div class="grow"><div class="t">Copper Kettle Café — Social Standard</div><div class="m">Jul 1 · card declined, retry Jul 8</div></div><span class="due num">$297</span><span class="pill p-crit">Failed</span></div>
+          </div>
+          <div class="note-callout">Won deal → the automation creates the client record, onboarding checklist, and first-invoice task. Failed payment → flags the client and opens a billing ticket.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabpane" id="hq-products" data-group="hq">
       <div class="grid g3">
         <div class="card"><h3>Social Standard <span class="pill p-good" style="margin-left:auto">Live</span></h3>
           <dl class="kv" style="grid-template-columns:92px 1fr"><dt>Type</dt><dd>Plan</dd><dt>Price</dt><dd>$297/mo</dd><dt>Includes</dt><dd>12 posts/mo, template-based, 1 revision round</dd><dt>CTA</dt><dd>Buy plan</dd></dl></div>
@@ -765,7 +853,13 @@ table.data .num{font-variant-numeric:tabular-nums}
 
   <!-- ============ CAMPAIGNS ============ -->
   <section class="view" id="view-campaigns">
-    <div class="vhead"><p class="eyebrow">Operations</p><h1>Campaigns</h1><div class="sub">The growth engine. Each campaign connects a brand, an offer, an audience, and everything built for it.</div></div>
+    <div class="vhead"><p class="eyebrow">Operations</p><h1>Campaigns</h1><div class="sub">The growth engine. Each campaign connects a brand, a product, an audience, a funnel, emails, content, tasks, and results — one record end to end.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Live</div><div class="v">3</div><div class="d">across 3 brands</div></div>
+      <div class="stat"><div class="k">In Build</div><div class="v">3</div><div class="d">next launch Jul 14</div></div>
+      <div class="stat"><div class="k">Pipeline Influenced</div><div class="v">$8.6k</div><div class="d">deals sourced from campaigns</div></div>
+      <div class="stat"><div class="k">MRR Added · 30d</div><div class="v">$2,673</div><div class="d">from campaign buyers</div></div>
+    </div>
     <div class="kanban" style="margin-bottom:22px">
       <div class="kcol"><h4>Planning <span>3</span></h4>
         <div class="kcard"><div class="t">Reseller Push</div><div class="meta"><span class="b">Brands</span><span class="due">Jul 20</span></div></div>
@@ -786,28 +880,145 @@ table.data .num{font-variant-numeric:tabular-nums}
         <div class="kcard"><div class="t">June Feature Posts</div><div class="meta"><span class="b">Social</span><span class="pill p-mut plain">Archived Jul 1</span></div></div></div>
     </div>
 
+    <p class="eyebrow" style="margin:0 0 8px">Campaign Detail</p>
+    <div class="tabs" data-group="cmpsel">
+      <button class="on" data-pane="cmpsel-live">Real Estate Social Offer <span class="pill p-good" style="margin-left:6px">Live</span></button>
+      <button data-pane="cmpsel-build">5 Posts for $99 Promo <span class="pill p-acc" style="margin-left:6px">Building</span></button>
+    </div>
+
+    <!-- live campaign: full depth -->
+    <div class="tabpane on" id="cmpsel-live" data-group="cmpsel">
     <div class="card">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
-        <p class="eyebrow" style="margin:0">Campaign Detail</p>
-        <span class="pill p-acc">Building</span>
-      </div>
-      <h3 style="font-size:16px;margin:6px 0 12px">5 Posts for $99 Promo</h3>
+      <h3 style="font-size:16px;margin:2px 0 12px">Real Estate Social Offer</h3>
       <div class="grid g4" style="margin-bottom:14px">
-        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Offer</dt><dd>5 posts for $99</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Product</dt><dd>Social Standard</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Audience</dt><dd>Real estate agents &amp; teams</dd><dt>Owner</dt><dd>Dillon</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Dates</dt><dd>Jun 20 – Jul 31</dd><dt>Channels</dt><dd>FB · IG · LI · email · site popup</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Budget</dt><dd>$450 (retargeting pending)</dd><dt>UTM</dt><dd>utm_campaign=re-social-jun</dd></dl>
+      </div>
+      <div class="grid g4" style="margin-bottom:14px">
+        <div class="stat"><div class="k">Leads</div><div class="v">86</div><div class="d">goal 100 by Jul 31</div></div>
+        <div class="stat"><div class="k">Calls Booked</div><div class="v">19</div><div class="d">22% of leads</div></div>
+        <div class="stat"><div class="k">Buyers</div><div class="v">7</div><div class="d">goal 10</div></div>
+        <div class="stat"><div class="k">MRR Added</div><div class="v">$2,079</div><div class="d">CAC $64 on ad spend</div></div>
+      </div>
+      <div class="tabs" data-group="cmpL">
+        <button class="on" data-pane="cmpL-funnel">Funnel</button>
+        <button data-pane="cmpL-emails">Emails</button>
+        <button data-pane="cmpL-check">Checklist</button>
+        <button data-pane="cmpL-tasks">Tasks</button>
+        <button data-pane="cmpL-perf">Performance</button>
+        <button data-pane="cmpL-notes">Notes</button>
+      </div>
+      <div class="tabpane on" id="cmpL-funnel" data-group="cmpL">
+        <div class="grid g2">
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Conversion</p>
+            <div class="fstep"><span class="lbl">Page visits</span><span class="trk"><i style="width:100%"></i></span><span class="val"><b>1,240</b></span></div>
+            <div class="fstep"><span class="lbl">Leads</span><span class="trk"><i style="width:42%"></i></span><span class="val"><b>86</b> · 6.9%</span></div>
+            <div class="fstep"><span class="lbl">Calls booked</span><span class="trk"><i style="width:19%"></i></span><span class="val"><b>19</b> · 22%</span></div>
+            <div class="fstep"><span class="lbl">Buyers</span><span class="trk"><i style="width:9%"></i></span><span class="val"><b>7</b> · 37%</span></div>
+            <div class="fieldnote" style="margin-top:8px">Funnel: /real-estate landing page → popup offer → booking calendar → Stripe checkout.</div>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Leads by Channel</p>
+            <div class="hbar"><span class="lbl">FB / IG organic</span><span class="trk"><i style="width:100%"></i></span><span class="val">34</span></div>
+            <div class="hbar"><span class="lbl">Email list</span><span class="trk"><i style="width:65%"></i></span><span class="val">22</span></div>
+            <div class="hbar"><span class="lbl">Site popup</span><span class="trk"><i style="width:53%"></i></span><span class="val">18</span></div>
+            <div class="hbar"><span class="lbl">LinkedIn</span><span class="trk"><i style="width:35%"></i></span><span class="val">12</span></div>
+            <div class="fieldnote" style="margin-top:8px">Best-converting source: agent Facebook groups → popup. Retargeting not launched yet.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tabpane" id="cmpL-emails" data-group="cmpL">
+        <div class="twrap">
+        <table class="data" style="min-width:0">
+          <thead><tr><th>#</th><th>Subject</th><th>Sent</th><th>Opens</th><th>Replies</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td class="t">Real estate agents keep asking for this</td><td><span class="due">Jun 24</span></td><td class="num">41%</td><td class="num">9</td><td><span class="pill p-good">Sent</span></td></tr>
+            <tr><td class="num">2</td><td class="t">5 example posts (steal these)</td><td><span class="due">Jun 27</span></td><td class="num">38%</td><td class="num">6</td><td><span class="pill p-good">Sent</span></td></tr>
+            <tr><td class="num">3</td><td class="t">Founding price ends this week</td><td><span class="due">Jul 2</span></td><td class="num">44%</td><td class="num">11</td><td><span class="pill p-good">Sent</span></td></tr>
+            <tr><td class="num">4</td><td class="t">Case study: 31 posts, 4 listings closed</td><td><span class="due">Jul 16</span></td><td class="num">—</td><td class="num">—</td><td><span class="pill p-mut">Drafting</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="fieldnote" style="margin-top:8px">Each email is a Content record on this campaign — copy, subject variants, and send status live on the record.</div>
+      </div>
+      <div class="tabpane" id="cmpL-check" data-group="cmpL">
+        <div class="rowlist">
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Landing page live at /real-estate</div><div class="m">Sam · Jun 20</div></div></div>
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">14 example posts produced</div><div class="m">Maya · Jun 22</div></div></div>
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Popup offer + booking calendar wired</div><div class="m">Sam · Jun 23</div></div></div>
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">3-email launch sequence sent</div><div class="m">Dillon · Jul 2</div></div></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Retargeting audience + ads</div><div class="m">Sam · due Jul 10 · $450 budget approved</div></div><span class="pill p-warn">Open</span></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Case study from first buyers</div><div class="m">Jordan · due Jul 15 · feeds email #4</div></div><span class="pill p-warn">Open</span></div>
+        </div>
+      </div>
+      <div class="tabpane" id="cmpL-tasks" data-group="cmpL">
+        <div class="rowlist">
+          <div class="row"><div class="grow"><div class="t">Publish real estate posts (batch of 3)</div><div class="m">Team · overdue Jul 3</div></div><span class="pill p-crit">Overdue</span></div>
+          <div class="row"><div class="grow"><div class="t">Final review: 5 example posts</div><div class="m">Dillon · blocks landing page refresh</div></div><span class="pill p-warn">Review</span></div>
+        </div>
+        <div class="fieldnote" style="margin-top:8px">4 tasks completed · same records as the master task board and GHL Social HQ.</div>
+      </div>
+      <div class="tabpane" id="cmpL-perf" data-group="cmpL">
+        <div class="grid g2">
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Leads per week</p>
+            <div class="cols" role="img" aria-label="Leads per week since launch: 18, 24, 31, and 13 so far this week">
+              <div class="c dim"><i style="height:58%"></i><span class="w">W1</span></div>
+              <div class="c dim"><i style="height:77%"></i><span class="w">W2</span></div>
+              <div class="c dim"><i style="height:100%"></i><span class="w">W3</span></div>
+              <div class="c"><i style="height:42%"></i><span class="v">13</span><span class="w">now</span></div>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin:0 0 6px">Against Goal</p>
+            <div class="hbar"><span class="lbl">Leads · goal 100</span><span class="trk"><i style="width:86%"></i></span><span class="val">86</span></div>
+            <div class="hbar"><span class="lbl">Buyers · goal 10</span><span class="trk"><i style="width:70%"></i></span><span class="val">7</span></div>
+            <div class="fieldnote" style="margin-top:8px">On pace to hit both goals by Jul 31 if week-3 lead rate holds. Result snapshots save to Reports weekly.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tabpane" id="cmpL-notes" data-group="cmpL">
+        <p class="fieldnote" style="max-width:68ch">Jun 26 — popup converts 2× the footer CTA; moved it above the examples. Jul 3 — best leads coming from agent Facebook groups, doubling that content next week. Jul 5 — two buyers asked about Reels: upsell angle for email #4.</p>
+      </div>
+    </div>
+    </div>
+
+    <!-- building campaign -->
+    <div class="tabpane" id="cmpsel-build" data-group="cmpsel">
+    <div class="card">
+      <h3 style="font-size:16px;margin:2px 0 12px">5 Posts for $99 Promo</h3>
+      <div class="grid g4" style="margin-bottom:14px">
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Product</dt><dd>5 posts for $99</dd></dl>
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Audience</dt><dd>HighLevel agencies &amp; SaaS</dd><dt>Owner</dt><dd>Dillon</dd></dl>
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Dates</dt><dd>Jul 15 – Jul 31</dd><dt>Channels</dt><dd>Email · LinkedIn · Social</dd></dl>
-        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Goal</dt><dd>Book meetings, first-month buyers</dd><dt>CTA</dt><dd>Claim the $99 pack</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Goal</dt><dd>10 first-month buyers</dd><dt>CTA</dt><dd>Claim the $99 pack</dd></dl>
       </div>
       <div class="tabs" data-group="cmp">
         <button class="on" data-pane="cmp-brief">Brief</button>
+        <button data-pane="cmp-check">Checklist</button>
         <button data-pane="cmp-tasks">Tasks</button>
         <button data-pane="cmp-content">Content</button>
+        <button data-pane="cmp-emails">Emails</button>
         <button data-pane="cmp-perf">Performance</button>
         <button data-pane="cmp-notes">Notes</button>
       </div>
       <div class="tabpane on" id="cmp-brief" data-group="cmp">
         <p style="max-width:68ch;margin:0 0 10px">Low-friction trial offer: five custom example posts for $99, delivered in five business days. The pack proves quality fast and converts into Social Standard. Funnel page, three-email sequence, and five example posts by niche. Tone pulled from BrandIQ: clear, confident, lightly funny.</p>
-        <div class="fieldnote">Assets needed: funnel page · pricing graphic · 5 example posts · offer badge &nbsp;·&nbsp; Tracking: utm_campaign=5for99-jul</div>
+        <div class="fieldnote">Assets needed: funnel page · pricing graphic · 5 example posts · offer badge &nbsp;·&nbsp; Tracking: utm_campaign=5for99-jul &nbsp;·&nbsp; Conversion goal: 30% of buyers upgrade to Standard within 30 days</div>
+      </div>
+      <div class="tabpane" id="cmp-check" data-group="cmp">
+        <div class="rowlist">
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Offer record + pricing approved</div><div class="m">Dillon · Jul 3</div></div></div>
+          <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Campaign brief written</div><div class="m">Dillon · Jul 5</div></div></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">5 example posts designed</div><div class="m">Maya · due Jul 11</div></div><span class="pill p-acc">In Progress</span></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Funnel page + checkout live</div><div class="m">Sam · due Jul 12</div></div><span class="pill p-mut">Planned</span></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Email sequence loaded + scheduled</div><div class="m">Dillon · due Jul 14</div></div><span class="pill p-mut">Planned</span></div>
+          <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Launch review — go / no-go</div><div class="m">Dillon · Jul 14 · gate for going live</div></div><span class="pill p-mut">Planned</span></div>
+        </div>
+        <div class="fieldnote" style="margin-top:8px">Checklist auto-created when the campaign moved to Building. Campaign can't flip to Live until gates are done.</div>
       </div>
       <div class="tabpane" id="cmp-tasks" data-group="cmp">
         <div class="rowlist">
@@ -825,17 +1036,30 @@ table.data .num{font-variant-numeric:tabular-nums}
           <div class="row"><div class="grow"><div class="t">Funnel hero + pricing copy</div><div class="m">Landing page</div></div><span class="pill p-mut">Writing</span></div>
         </div>
       </div>
+      <div class="tabpane" id="cmp-emails" data-group="cmp">
+        <div class="twrap">
+        <table class="data" style="min-width:0">
+          <thead><tr><th>#</th><th>Subject (working)</th><th>Send</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td class="t">5 custom posts. $99. Five days.</td><td><span class="due">Jul 15</span></td><td><span class="pill p-mut">Writing</span></td></tr>
+            <tr><td class="num">2</td><td class="t">What agencies do with the $99 pack</td><td><span class="due">Jul 18</span></td><td><span class="pill p-mut">Planned</span></td></tr>
+            <tr><td class="num">3</td><td class="t">Last call — promo closes Jul 31</td><td><span class="due">Jul 28</span></td><td><span class="pill p-mut">Planned</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
       <div class="tabpane" id="cmp-perf" data-group="cmp">
         <div class="grid g4">
           <div class="stat"><div class="k">Leads</div><div class="v">—</div><div class="d">starts Jul 15</div></div>
           <div class="stat"><div class="k">Replies</div><div class="v">—</div></div>
-          <div class="stat"><div class="k">Calls Booked</div><div class="v">—</div></div>
           <div class="stat"><div class="k">Buyers</div><div class="v">—</div><div class="d">goal: 10</div></div>
+          <div class="stat"><div class="k">Upgrades to Standard</div><div class="v">—</div><div class="d">goal: 30% in 30 days</div></div>
         </div>
       </div>
       <div class="tabpane" id="cmp-notes" data-group="cmp">
         <p class="fieldnote" style="max-width:68ch">Jul 3 — decided to cap at one niche per buyer so examples stay specific. Jul 5 — checkout via existing Stripe link, no new tooling for V1.</p>
       </div>
+    </div>
     </div>
   </section>
 
@@ -882,7 +1106,27 @@ table.data .num{font-variant-numeric:tabular-nums}
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Owner</dt><dd>Maya (design)</dd><dt>Due</dt><dd>July 10</dd></dl>
         <dl class="kv" style="grid-template-columns:80px 1fr"><dt>CTA</dt><dd>Book a call / claim plan</dd><dt>Approval</dt><dd>Internal → none needed from client</dd></dl>
       </div>
-      <div class="fieldnote">Brief auto-drafted from BrandIQ tone + campaign goal. Caption and hashtags stored on the record; design file linked from Assets.</div>
+      <div class="divider"></div>
+      <div class="grid g2">
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">Repurposing · one idea, four formats</p>
+          <div class="rowlist">
+            <div class="row"><div class="grow"><div class="t">Carousel (this record)</div><div class="m">FB · IG · LI</div></div><span class="pill p-acc">In Design</span></div>
+            <div class="row"><div class="grow"><div class="t">Email #2 of launch sequence</div><div class="m">Same hook, long form</div></div><span class="pill p-good">Sent</span></div>
+            <div class="row"><div class="grow"><div class="t">Reel — 30s walkthrough</div><div class="m">Script drafted from carousel copy</div></div><span class="pill p-mut">Idea</span></div>
+            <div class="row"><div class="grow"><div class="t">Landing page proof section</div><div class="m">Slides 2–4 reused as static images</div></div><span class="pill p-good">Live</span></div>
+          </div>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">Approval Trail</p>
+          <div class="rowlist">
+            <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Brief approved</div><div class="m">Dillon · Jul 3</div></div></div>
+            <div class="row donetask"><span class="check done">✓</span><div class="grow"><div class="t">Copy approved</div><div class="m">Dillon · Jul 6 · “tighten slide 5 CTA”</div></div></div>
+            <div class="row"><span class="check todo"></span><div class="grow"><div class="t">Design review</div><div class="m">due Jul 10 · then auto-moves to Scheduled</div></div></div>
+          </div>
+          <div class="fieldnote" style="margin-top:6px">Brief auto-drafted from BrandIQ tone + campaign goal. Caption and hashtags stored on the record; design file linked from Assets.</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -914,53 +1158,227 @@ table.data .num{font-variant-numeric:tabular-nums}
     <div class="note-callout">Each chip is a Social Post record: platform, caption, creative link, campaign, approval notes, publish status. Amber stripe = overdue against publish date; green = approved &amp; scheduled.</div>
   </section>
 
-  <!-- ============ OFFERS ============ -->
-  <section class="view" id="view-offers">
-    <div class="vhead"><p class="eyebrow">Business</p><h1>Offers</h1><div class="sub">One record per offer. Campaigns, sales pages, and posts all pull pricing and inclusions from here — update once, flag everything using the old copy.</div></div>
-    <div class="card">
+  <!-- ============ SALES: PIPELINE ============ -->
+  <section class="view" id="view-pipeline">
+    <div class="vhead"><p class="eyebrow">Sales</p><h1>Pipeline</h1><div class="sub">Every open deal across all brands, by stage. Deals link to their brand, product, campaign source, and follow-up tasks.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Open Pipeline</div><div class="v">$14.9k</div><div class="d">19 deals</div></div>
+      <div class="stat"><div class="k">Weighted</div><div class="v">$6.2k</div><div class="d">by stage probability</div></div>
+      <div class="stat"><div class="k">Win Rate · 90d</div><div class="v">38<span class="unit">%</span></div><div class="d">avg cycle 11 days</div></div>
+      <div class="stat"><div class="k">Won · July</div><div class="v">$693</div><div class="d">MRR from 2 deals</div></div>
+    </div>
+    <div class="chiprow">
+      <button class="chip on">All brands</button><button class="chip">GHL Social</button><button class="chip">GHL Sites</button><button class="chip">GHL Onboard</button><button class="chip">GHL Brands</button>
+    </div>
+    <div class="kanban">
+      <div class="kcol"><h4>New <span>3</span></h4>
+        <div class="kcard"><div class="t">Harbor Dental — site build</div><div class="meta"><span class="b">Sites</span><span class="val">$997</span></div><div class="next">From intake form · assign owner</div></div>
+        <div class="kcard"><div class="t">Peak Perform Coaching</div><div class="meta"><span class="b">Social</span><span class="val">$297/mo</span></div><div class="next">First reply · Dillon</div></div>
+        <div class="kcard"><div class="t">Westside Auto Group</div><div class="meta"><span class="b">Chat</span><span class="val">$397/mo</span></div><div class="next">Qualify budget · Alex</div></div></div>
+      <div class="kcol"><h4>Qualified <span>4</span></h4>
+        <div class="kcard"><div class="t">Growthline Agency — reseller</div><div class="meta"><span class="b">Brands</span><span class="val">Rev share</span></div><div class="next">Send program deck · Dillon</div></div>
+        <div class="kcard"><div class="t">Lakeview Realty — site + social</div><div class="meta"><span class="b">Sites</span><span class="val">$1,294</span></div><div class="next">Book scoping call · Alex</div></div>
+        <div class="kcard"><div class="t">Fern &amp; Field Florist</div><div class="meta"><span class="b">Social</span><span class="val">$297/mo</span></div><div class="next">Book discovery · Dillon</div></div>
+        <div class="kcard"><div class="t">Cobalt CRM — onboarding</div><div class="meta"><span class="b">Onboard</span><span class="val">$1,997</span></div><div class="next">Scope pilot · Dillon</div></div></div>
+      <div class="kcol"><h4>Discovery <span>3</span></h4>
+        <div class="kcard"><div class="t">Maple &amp; Main Realty</div><div class="meta"><span class="b">Social</span><span class="val">$297/mo</span></div><div class="next">Send RE examples · from live campaign</div></div>
+        <div class="kcard"><div class="t">Redline Fitness — promo video</div><div class="meta"><span class="b">Video</span><span class="val">$197</span></div><div class="next">Share intro offer · Jordan</div></div>
+        <div class="kcard"><div class="t">TrueNorth Agency — audit</div><div class="meta"><span class="b">Audit</span><span class="val">$497</span></div><div class="next">Review account access · Dillon</div></div></div>
+      <div class="kcol"><h4>Proposal <span>5</span></h4>
+        <div class="kcard" style="border-color:var(--accent)"><div class="t">Summit Agency Co</div><div class="meta"><span class="b">Social</span><span class="val">$597/mo</span></div><div class="next">Follow up today · Dillon</div></div>
+        <div class="kcard"><div class="t">BrightPath SaaS — pilot</div><div class="meta"><span class="b">Onboard</span><span class="val">$1,997</span></div><div class="next">Waiting on reply · day 2</div></div>
+        <div class="kcard"><div class="t">Juniper Wellness</div><div class="meta"><span class="b">Social</span><span class="val">$597/mo</span></div><div class="next">Waiting on reply · day 3</div></div>
+        <div class="kcard"><div class="t">Stateline Insurance — site</div><div class="meta"><span class="b">Sites</span><span class="val">$997</span></div><div class="next">Proposal draft due Jul 9 · Sam</div></div>
+        <div class="kcard"><div class="t">Anchor Legal</div><div class="meta"><span class="b">Social</span><span class="val">$297/mo</span></div><div class="next">Pricing question answered</div></div></div>
+      <div class="kcol"><h4>Negotiation <span>2</span></h4>
+        <div class="kcard"><div class="t">Northpeak SaaS ×3 accounts</div><div class="meta"><span class="b">Social</span><span class="val">$891/mo</span></div><div class="next">Send revised quote · contract length objection</div></div>
+        <div class="kcard"><div class="t">Vista Property Mgmt — build</div><div class="meta"><span class="b">Engineers</span><span class="val">$2,400</span></div><div class="next">Deposit invoice sent · due Jul 12</div></div></div>
+      <div class="kcol"><h4>Won · July <span>2</span></h4>
+        <div class="kcard"><div class="t">Nimbus SaaS ×2</div><div class="meta"><span class="b">Social</span><span class="val">$594/mo</span></div><div class="next">→ client created, onboarding started</div></div>
+        <div class="kcard"><div class="t">Oak City Realty — $99 pack</div><div class="meta"><span class="b">Social</span><span class="val">$99</span></div><div class="next">Upgrade candidate · from RE campaign</div></div></div>
+    </div>
+    <div class="note-callout"><b>Deals connect everything:</b> Maple &amp; Main came from the Real Estate campaign, uses the Social Standard product record for pricing, and its follow-up is a task in Dillon's queue. Won → client + onboarding checklist, automatically.</div>
+  </section>
+
+  <!-- ============ SALES: PRODUCTS & SERVICES ============ -->
+  <section class="view" id="view-products">
+    <div class="vhead"><p class="eyebrow">Sales</p><h1>Products &amp; Services</h1><div class="sub">One record per product. Campaigns, sales pages, emails, and proposals all pull price and inclusions from here — update once, everything using old copy gets flagged.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">Products</div><div class="v">11</div><div class="d">across 8 brands</div></div>
+      <div class="stat"><div class="k">MRR</div><div class="v">$8,540</div><div class="d">14 active subscriptions</div></div>
+      <div class="stat"><div class="k">Project Revenue · Q3</div><div class="v">$4,690</div><div class="d">builds &amp; sprints</div></div>
+      <div class="stat"><div class="k">Promos Live</div><div class="v">2</div><div class="d">$99 pack · Video intro</div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
       <div class="twrap">
       <table class="data">
-        <thead><tr><th>Offer</th><th>Brand</th><th>Type</th><th>Price</th><th>Billing</th><th>Status</th><th>Used By</th></tr></thead>
+        <thead><tr><th>Product / Service</th><th>Brand</th><th>Type</th><th>Price</th><th>Billing</th><th>Active</th><th>MRR</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td class="t">Social Standard</td><td>GHL Social</td><td>Plan</td><td class="num">$297</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">2 campaigns</td></tr>
-          <tr><td class="t">Custom Social</td><td>GHL Social</td><td>Plan</td><td class="num">$597</td><td>Monthly</td><td><span class="pill p-warn">Updating</span></td><td class="num">1 campaign</td></tr>
-          <tr><td class="t">5 Posts for $99</td><td>GHL Social</td><td>Promo</td><td class="num">$99</td><td>One-time</td><td><span class="pill p-acc">Launching</span></td><td class="num">1 campaign</td></tr>
-          <tr><td class="t">Reels Add-On</td><td>GHL Social</td><td>Add-on</td><td class="num">$147</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">—</td></tr>
-          <tr><td class="t">Full-Time Social Manager</td><td>GHL Social</td><td>Service</td><td class="num">$1,497</td><td>Monthly</td><td><span class="pill p-good">Live</span></td><td class="num">—</td></tr>
-          <tr><td class="t">Site Build — Standard</td><td>GHL Sites</td><td>Service</td><td class="num">$997</td><td>Project</td><td><span class="pill p-good">Live</span></td><td class="num">1 campaign</td></tr>
-          <tr><td class="t">Onboard Accelerator</td><td>GHL Onboard</td><td>Program</td><td class="num">$1,997</td><td>Project</td><td><span class="pill p-acc">Launching</span></td><td class="num">1 campaign</td></tr>
-          <tr><td class="t">Reseller Program</td><td>GHL Brands</td><td>Program</td><td class="num">Rev share</td><td>—</td><td><span class="pill p-mut">Drafting</span></td><td class="num">1 campaign</td></tr>
-          <tr><td class="t">Video Intro Offer</td><td>GHL Video</td><td>Promo</td><td class="num">$197</td><td>One-time</td><td><span class="pill p-good">Live</span></td><td class="num">1 campaign</td></tr>
+          <tr><td class="t">Social Standard</td><td>GHL Social</td><td>Plan</td><td class="num">$297</td><td>Monthly</td><td class="num">6</td><td class="num">$1,782</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Custom Social</td><td>GHL Social</td><td>Plan</td><td class="num">$597</td><td>Monthly</td><td class="num">2</td><td class="num">$1,194</td><td><span class="pill p-warn">Updating</span></td></tr>
+          <tr><td class="t">5 Posts for $99</td><td>GHL Social</td><td>Promo</td><td class="num">$99</td><td>One-time</td><td class="num">3</td><td class="num">—</td><td><span class="pill p-acc">Launching</span></td></tr>
+          <tr><td class="t">Reels Add-On</td><td>GHL Social</td><td>Add-on</td><td class="num">$147</td><td>Monthly</td><td class="num">2</td><td class="num">$294</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Full-Time Social Manager</td><td>GHL Social</td><td>Service</td><td class="num">$1,497</td><td>Monthly</td><td class="num">1</td><td class="num">$1,497</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Site Build — Standard</td><td>GHL Sites</td><td>Service</td><td class="num">$997</td><td>Project</td><td class="num">2</td><td class="num">—</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Onboard Accelerator</td><td>GHL Onboard</td><td>Program</td><td class="num">$1,997</td><td>Project</td><td class="num">1</td><td class="num">—</td><td><span class="pill p-acc">Launching</span></td></tr>
+          <tr><td class="t">Admin Retainer</td><td>GHL Admins</td><td>Service</td><td class="num">$797</td><td>Monthly</td><td class="num">2</td><td class="num">$1,594</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Managed Chat</td><td>GHL Chat</td><td>Service</td><td class="num">$397</td><td>Monthly</td><td class="num">1</td><td class="num">$397</td><td><span class="pill p-mut">Beta</span></td></tr>
+          <tr><td class="t">Build Sprint</td><td>GHL Engineers</td><td>Service</td><td class="num">$2,400</td><td>Project</td><td class="num">1</td><td class="num">—</td><td><span class="pill p-good">Live</span></td></tr>
+          <tr><td class="t">Video Intro Offer</td><td>GHL Video</td><td>Promo</td><td class="num">$197</td><td>One-time</td><td class="num">4</td><td class="num">—</td><td><span class="pill p-good">Live</span></td></tr>
         </tbody>
       </table>
       </div>
-      <div class="note-callout">Custom Social was updated Jul 3 → the <b>“offer updated”</b> automation flagged 1 campaign and 3 content items still using old pricing copy.</div>
+      <div class="note-callout">Custom Social was updated Jul 3 → the <b>“product updated”</b> automation flagged 1 campaign and 3 content items still using old pricing copy.</div>
+    </div>
+    <div class="card">
+      <p class="eyebrow" style="margin:0 0 6px">Product Record</p>
+      <h3 style="font-size:16px;margin:0 0 12px">Social Standard <span class="pill p-good" style="margin-left:8px">Live</span></h3>
+      <div class="grid g4" style="margin-bottom:12px">
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Brand</dt><dd>GHL Social</dd><dt>Type</dt><dd>Plan · monthly</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Price</dt><dd>$297/mo · no setup fee</dd><dt>History</dt><dd>$247 → $297 (Jun 1)</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Clients</dt><dd>6 active · $1,782 MRR</dd><dt>Margin</dt><dd>~62% at current delivery cost</dd></dl>
+        <dl class="kv" style="grid-template-columns:80px 1fr"><dt>Used by</dt><dd>2 campaigns · 4 content items</dd><dt>Links</dt><dd>Sales page · checkout · SOP</dd></dl>
+      </div>
+      <div class="grid g3">
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">What's Included</p>
+          <div class="fieldnote">12 posts/month, template-based · captions + hashtags · 1 revision round · monthly content calendar · white-label delivery</div>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">Not Included</p>
+          <div class="fieldnote">Custom design (→ Custom Social) · Reels (→ add-on) · community management · ad management</div>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">Top Objections</p>
+          <div class="fieldnote">“AI can do this free” → example quality gap · “Templates look generic” → niche example sets · “Contract length” → month-to-month</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SALES: TRANSACTIONS ============ -->
+  <section class="view" id="view-transactions">
+    <div class="vhead"><p class="eyebrow">Sales</p><h1>Transactions</h1><div class="sub">Money in, across every brand — subscriptions, invoices, and one-time payments, tied to clients and products.</div></div>
+    <div class="grid g4" style="margin-bottom:14px">
+      <div class="stat"><div class="k">MRR</div><div class="v">$8,540</div><div class="d">+$693 this month</div></div>
+      <div class="stat"><div class="k">Collected · July</div><div class="v">$6,230</div><div class="d">of $8,370 expected</div></div>
+      <div class="stat"><div class="k">Outstanding</div><div class="v">$2,140</div><div class="d">2 invoices open</div></div>
+      <div class="stat alert"><div class="k">Failed / Overdue</div><div class="v">2</div><div class="d">$795 at risk</div></div>
+    </div>
+    <div class="chiprow">
+      <button class="chip on">All</button><button class="chip">Subscriptions</button><button class="chip">Invoices</button><button class="chip">One-time</button><button class="chip">Failed / Overdue</button>
+    </div>
+    <div class="card">
+      <div class="twrap">
+      <table class="data">
+        <thead><tr><th>Date</th><th>Client</th><th>Brand</th><th>Product</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><span class="due">Jul 6</span></td><td class="t">Rivera Realty</td><td>GHL Social</td><td>Social Standard</td><td>Subscription</td><td class="num">$297</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due">Jul 5</span></td><td class="t">Oak City Realty</td><td>GHL Social</td><td>5 Posts for $99</td><td>One-time</td><td class="num">$99</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due">Jul 5</span></td><td class="t">Hartley Legal</td><td>GHL Video</td><td>Video Intro Offer</td><td>One-time</td><td class="num">$197</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due">Jul 3</span></td><td class="t">Northgate Fitness</td><td>GHL Social</td><td>Custom Social</td><td>Subscription</td><td class="num">$597</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due over">Jul 2</span></td><td class="t">Beacon Home Co</td><td>GHL Sites</td><td>Site Build · 50% milestone</td><td>Invoice</td><td class="num">$498</td><td><span class="pill p-crit">Overdue</span></td></tr>
+          <tr><td><span class="due">Jul 1</span></td><td class="t">Nimbus SaaS</td><td>GHL Social</td><td>Social Standard ×2</td><td>Subscription</td><td class="num">$594</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due over">Jul 1</span></td><td class="t">Copper Kettle Café</td><td>GHL Social</td><td>Social Standard</td><td>Subscription</td><td class="num">$297</td><td><span class="pill p-crit">Failed</span></td></tr>
+          <tr><td><span class="due">Jun 30</span></td><td class="t">BrightPath SaaS</td><td>GHL Onboard</td><td>Accelerator · deposit</td><td>Invoice</td><td class="num">$998</td><td><span class="pill p-good">Paid</span></td></tr>
+          <tr><td><span class="due">Jun 28</span></td><td class="t">Vista Property Mgmt</td><td>GHL Engineers</td><td>Build Sprint · deposit</td><td>Invoice</td><td class="num">$1,200</td><td><span class="pill p-warn">Due Jul 12</span></td></tr>
+          <tr><td><span class="due">Jun 28</span></td><td class="t">Summit Retainer Group</td><td>GHL Admins</td><td>Admin Retainer ×2</td><td>Subscription</td><td class="num">$1,594</td><td><span class="pill p-good">Paid</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note-callout">Failed payment → automation flags the client (Copper Kettle is already marked churn risk), opens a billing ticket, and schedules the retry follow-up. Stripe/HighLevel sync feeds this ledger in a later phase — V1 tracks it manually.</div>
+    </div>
+  </section>
+
+  <!-- ============ SALES: COMPETITION ============ -->
+  <section class="view" id="view-competition">
+    <div class="vhead"><p class="eyebrow">Sales</p><h1>Competition</h1><div class="sub">Who each brand sells against, how we win, and what changed lately. Feeds BrandIQ sales angles and objection handling.</div></div>
+    <div class="chiprow">
+      <button class="chip on">GHL Social</button><button class="chip">GHL Sites</button><button class="chip">GHL Onboard</button><button class="chip">GHL Admins</button><button class="chip">All brands</button>
+    </div>
+    <div class="grid g3" style="margin-bottom:14px">
+      <div class="card">
+        <h3>Social99 <span class="pill p-warn" style="margin-left:auto">Main threat</span></h3>
+        <dl class="kv" style="grid-template-columns:86px 1fr">
+          <dt>Pricing</dt><dd>$79–149/mo, template plans</dd>
+          <dt>Strength</dt><dd>Cheap, fast signup, big ad budget</dd>
+          <dt>Weakness</dt><dd>Generic content, no HighLevel focus, no white-label</dd>
+          <dt>Our angle</dt><dd>Niche example sets + white-label delivery agencies can resell</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>AgencyContent Co</h3>
+        <dl class="kv" style="grid-template-columns:86px 1fr">
+          <dt>Pricing</dt><dd>$399+/mo custom</dd>
+          <dt>Strength</dt><dd>Strong design quality, case studies</dd>
+          <dt>Weakness</dt><dd>7-day turnaround, no reseller pricing</dd>
+          <dt>Our angle</dt><dd>Same quality tier at 5-day delivery, margin left for agencies</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>DIY AI Tools</h3>
+        <dl class="kv" style="grid-template-columns:86px 1fr">
+          <dt>Pricing</dt><dd>Free–$49/mo</dd>
+          <dt>Strength</dt><dd>Price, instant output</dd>
+          <dt>Weakness</dt><dd>Quality gap, no strategy, client still does the work</dd>
+          <dt>Our angle</dt><dd>Show side-by-side examples · handled in pricing FAQ</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Positioning <span class="cnt">GHL Social vs field</span></h3>
+        <div class="twrap">
+        <table class="data" style="min-width:0">
+          <thead><tr><th></th><th>GHL Social</th><th>Social99</th><th>AgencyContent</th></tr></thead>
+          <tbody>
+            <tr><td class="t">Entry price</td><td class="num">$297</td><td class="num">$79</td><td class="num">$399</td></tr>
+            <tr><td class="t">Turnaround</td><td>5 days</td><td>3 days</td><td>7 days</td></tr>
+            <tr><td class="t">White-label</td><td><span class="pill p-good plain">Yes</span></td><td><span class="pill p-mut plain">No</span></td><td><span class="pill p-mut plain">No</span></td></tr>
+            <tr><td class="t">HighLevel-native</td><td><span class="pill p-good plain">Yes</span></td><td><span class="pill p-mut plain">No</span></td><td><span class="pill p-mut plain">No</span></td></tr>
+            <tr><td class="t">Niche examples</td><td><span class="pill p-good plain">Yes</span></td><td><span class="pill p-mut plain">No</span></td><td><span class="pill p-warn plain">Some</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Watchlist <span class="cnt">recent moves</span></h3>
+        <div class="rowlist">
+          <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">Social99 dropped entry price to $79</div><div class="m">Jul 3 · screenshot in swipe file · pricing FAQ updated?</div></div><span class="pill p-warn">Review</span></div>
+          <div class="row"><span class="sev warn"></span><div class="grow"><div class="t">AgencyContent launched a real estate niche pack</div><div class="m">Jun 29 · overlaps our live RE campaign · note linked</div></div><span class="pill p-warn">Review</span></div>
+          <div class="row"><span class="sev acc"></span><div class="grow"><div class="t">AI tool added brand-kit ingestion</div><div class="m">Jun 24 · monitor — still no strategy layer</div></div><span class="pill p-mut">Watching</span></div>
+        </div>
+        <div class="note-callout">Watchlist items come from the Inbox (screenshots, links) and process into competitor records. Each “Review” creates a task to check our positioning copy.</div>
+      </div>
     </div>
   </section>
 
   <!-- ============ CRM ============ -->
   <section class="view" id="view-crm">
-    <div class="vhead"><p class="eyebrow">Business</p><h1>CRM Light</h1><div class="sub">Brand context for relationships — not a HighLevel replacement. HighLevel stays the system of record; this layer ties deals to brands and campaigns.</div></div>
+    <div class="vhead"><p class="eyebrow">Business</p><h1>CRM Light</h1><div class="sub">Contacts, prospects, and partners with brand context — not a HighLevel replacement. Deals live in Sales → Pipeline; this is the relationship layer behind them.</div></div>
     <div class="grid g4" style="margin-bottom:14px">
-      <div class="stat"><div class="k">Open Deals</div><div class="v">19</div><div class="d">$21.4k monthly value</div></div>
-      <div class="stat"><div class="k">Active Conversations</div><div class="v">12</div></div>
+      <div class="stat"><div class="k">Prospects</div><div class="v">42</div><div class="d">cold + engaged</div></div>
+      <div class="stat"><div class="k">Active Conversations</div><div class="v">12</div><div class="d">replied or engaged</div></div>
       <div class="stat"><div class="k">Follow-Up Queue</div><div class="v">8</div><div class="d">3 due today</div></div>
-      <div class="stat"><div class="k">Partner Pipeline</div><div class="v">4</div></div>
+      <div class="stat"><div class="k">Partners</div><div class="v">4</div><div class="d">2 resellers in pipeline</div></div>
     </div>
     <div class="card">
-      <h3>Deals by Brand</h3>
+      <h3>Contacts &amp; Prospects</h3>
       <div class="twrap">
       <table class="data">
-        <thead><tr><th>Deal</th><th>Company</th><th>Brand</th><th>Stage</th><th>Value</th><th>Next Step</th><th>Owner</th></tr></thead>
+        <thead><tr><th>Name</th><th>Company</th><th>Type</th><th>Brand Interest</th><th>Last Touch</th><th>Next Step</th><th>Owner</th></tr></thead>
         <tbody>
-          <tr><td class="t">Summit Agency Co — Custom Social</td><td>Summit Agency Co</td><td>GHL Social</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$597/mo</td><td>Follow up today</td><td>Dillon</td></tr>
-          <tr><td class="t">Northpeak SaaS — Standard ×3</td><td>Northpeak</td><td>GHL Social</td><td><span class="pill p-acc">Negotiation</span></td><td class="num">$891/mo</td><td>Send revised quote</td><td>Dillon</td></tr>
-          <tr><td class="t">Lakeview Realty — site + social</td><td>Lakeview Realty</td><td>GHL Sites</td><td><span class="pill p-mut">Discovery</span></td><td class="num">$1,294</td><td>Book scoping call</td><td>Alex</td></tr>
-          <tr><td class="t">Reseller: Growthline Agency</td><td>Growthline</td><td>GHL Brands</td><td><span class="pill p-mut">Qualifying</span></td><td class="num">Rev share</td><td>Send program deck</td><td>Dillon</td></tr>
-          <tr><td class="t">Onboard Accelerator — pilot</td><td>BrightPath SaaS</td><td>GHL Onboard</td><td><span class="pill p-acc">Proposal</span></td><td class="num">$1,997</td><td>Waiting on reply · day 2</td><td>Dillon</td></tr>
+          <tr><td class="t">Marcus Webb</td><td>Summit Agency Co</td><td><span class="pill p-acc plain">Prospect</span></td><td>GHL Social</td><td><span class="due">Jul 5 · call</span></td><td>Follow up on proposal today</td><td>Dillon</td></tr>
+          <tr><td class="t">Priya Natarajan</td><td>Northpeak SaaS</td><td><span class="pill p-acc plain">Prospect</span></td><td>GHL Social</td><td><span class="due">Jul 3 · email</span></td><td>Revised quote · contract length objection</td><td>Dillon</td></tr>
+          <tr><td class="t">Dana Ellis</td><td>Growthline Agency</td><td><span class="pill p-mut plain">Partner</span></td><td>Reseller Program</td><td><span class="due">Jul 5 · call</span></td><td>Send program deck · wants white-label audits</td><td>Dillon</td></tr>
+          <tr><td class="t">Tom Reyes</td><td>Lakeview Realty</td><td><span class="pill p-acc plain">Prospect</span></td><td>GHL Sites + Social</td><td><span class="due">Jul 1 · form</span></td><td>Book scoping call</td><td>Alex</td></tr>
+          <tr><td class="t">Sofia Marino</td><td>Rivera Realty</td><td><span class="pill p-good plain">Client</span></td><td>GHL Social</td><td><span class="due">Jul 6 · ticket</span></td><td>Logo fix confirmation + renewal touch (Aug 1)</td><td>Alex</td></tr>
+          <tr><td class="t">James Okafor</td><td>BrightPath SaaS</td><td><span class="pill p-good plain">Client</span></td><td>GHL Onboard</td><td><span class="due">Jul 4 · call</span></td><td>Onboarding week-1 check-in</td><td>Dillon</td></tr>
+          <tr><td class="t">Elaine Foster</td><td>Foster Media (agency)</td><td><span class="pill p-mut plain">Partner</span></td><td>Referral partner</td><td><span class="due">Jun 26 · email</span></td><td>Quarterly referral recap</td><td>Jordan</td></tr>
         </tbody>
       </table>
       </div>
+      <div class="note-callout">A contact's timeline pulls from everywhere: their deals (Pipeline), payments (Transactions), tickets (Support), and meetings (Notes). HighLevel remains the outreach system of record.</div>
     </div>
   </section>
 
@@ -1192,7 +1610,8 @@ table.data .num{font-variant-numeric:tabular-nums}
     tasks:    {crumb:"Tasks",    views:[["tasks","Tasks"]]},
     campaigns:{crumb:"Campaigns",views:[["campaigns","Campaigns"]]},
     content:  {crumb:"Content",  views:[["content","Pipeline"],["social","Social Calendar"]]},
-    business: {crumb:"Business", views:[["offers","Offers"],["crm","CRM Light"],["clients","Clients","14"],["support","Support","5"]]},
+    sales:    {crumb:"Sales",    views:[["pipeline","Pipeline","19"],["products","Products & Services"],["transactions","Transactions"],["competition","Competition"]]},
+    business: {crumb:"Business", views:[["crm","CRM Light"],["clients","Clients","14"],["support","Support","5"]]},
     library:  {crumb:"Library",  views:[["assets","Assets"],["notes","Notes & Decisions"]]},
     reports:  {crumb:"Reports",  views:[["reports","Reports"]]},
     system:   {crumb:"System",   views:[["automations","Automations"],["settings","Settings & Roles"]]}
@@ -1303,8 +1722,13 @@ table.data .num{font-variant-numeric:tabular-nums}
   Object.keys(BRANDS).forEach(function(k){ INDEX.push({t:BRANDS[k].name, k:"Brand", v:"hq", b:k}); });
   [["5 Posts for $99 Promo","Campaign","campaigns"],["July SaaS Promo","Campaign","campaigns"],
    ["Real Estate Social Offer","Campaign","campaigns"],["Reseller Push","Campaign","campaigns"],
-   ["Social Standard","Offer","offers"],["Custom Social","Offer","offers"],["Reels Add-On","Offer","offers"],
+   ["Social Standard","Product","products"],["Custom Social","Product","products"],["Reels Add-On","Product","products"],
+   ["Onboard Accelerator","Product","products"],["Admin Retainer","Product","products"],
+   ["Summit Agency Co","Deal","pipeline"],["Northpeak SaaS","Deal","pipeline"],["Growthline Agency","Deal","pipeline"],
+   ["Nimbus SaaS","Deal","pipeline"],["Vista Property Mgmt","Deal","pipeline"],
+   ["Social99","Competitor","competition"],["AgencyContent Co","Competitor","competition"],
    ["Rivera Realty","Client","clients"],["Beacon Home Co","Client","clients"],["Copper Kettle Café","Client","clients"],
+   ["Failed payment — Copper Kettle","Transaction","transactions"],["Beacon Home Co invoice","Transaction","transactions"],
    ["Finish SaaS email sequence","Task","tasks"],["Write cold email sequence","Task","tasks"],
    ["Real Estate Offer Carousel","Content","content"],["SOP: Client Content Approval","Asset","assets"],
    ["Decision: two primary plans","Decision","notes"]

@@ -22,12 +22,13 @@ several pages get a secondary tab strip under the top bar.
 
 | Rail item | Pages |
 |---|---|
-| Command Center | Overview, Today, Needs Attention, Inbox |
-| Brands | Directory → Brand HQ (Overview, BrandIQ, Offers, Campaigns, Content, Social, Tasks, Assets, Reports) |
+| Command Center | Overview (incl. sales movement + pipeline by stage), Today, Needs Attention, Inbox |
+| Brands | Directory → Brand HQ (Overview, BrandIQ w/ competitors, Sales, Products, Campaigns, Content, Social, Tasks, Assets, Reports) |
 | Tasks | Master task list with saved-view filters |
-| Campaigns | Board + campaign detail |
-| Content | Pipeline board + item detail, Social Calendar |
-| Business | Offers, CRM Light, Clients, Support |
+| Campaigns | Stats + board + deep detail for a Live and a Building campaign (funnel conversion, email sequence results, launch checklist, tasks, performance vs goal, notes) |
+| Content | Pipeline board + item detail (repurposing tracker, approval trail), Social Calendar |
+| Sales | Pipeline (deal stages w/ values), Products & Services (MRR, product record), Transactions (ledger + billing status), Competition (competitor records, positioning, watchlist) |
+| Business | CRM Light (contacts/prospects/partners), Clients, Support |
 | Library | Assets, Notes & Decisions |
 | Reports | Brand health, content output, workload, revenue |
 | System | Automations, Settings/Roles |
