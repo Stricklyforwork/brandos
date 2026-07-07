@@ -17,14 +17,22 @@ Each brand gets its own HQ; the parent company gets one summarized command cente
 
 ## What the mockup covers
 
-| Area | Views |
+Navigation is deliberately small — nine top-level items; sections that hold
+several pages get a secondary tab strip under the top bar.
+
+| Rail item | Pages |
 |---|---|
-| Command | Master Command Center, Today, Needs Attention, Inbox |
-| Brands | Brand Directory, Brand HQ (Overview, BrandIQ, Offers, Campaigns, Content, Social, Tasks, Assets, Reports) |
-| Operations | Tasks (saved-view filters), Campaigns (board + detail), Content (pipeline board + item detail), Social Calendar, Assets, Notes & Decisions |
+| Command Center | Overview, Today, Needs Attention, Inbox |
+| Brands | Directory → Brand HQ (Overview, BrandIQ, Offers, Campaigns, Content, Social, Tasks, Assets, Reports) |
+| Tasks | Master task list with saved-view filters |
+| Campaigns | Board + campaign detail |
+| Content | Pipeline board + item detail, Social Calendar |
 | Business | Offers, CRM Light, Clients, Support |
-| System | Reports (brand health, content output, workload, revenue), Automations, Settings/Roles |
-| Everywhere | Universal Quick Add (what / brand / owner / due / related) |
+| Library | Assets, Notes & Decisions |
+| Reports | Brand health, content output, workload, revenue |
+| System | Automations, Settings/Roles |
+
+Universal Quick Add (what / brand / owner / due / related) is available everywhere.
 
 Deliberately **not** in V1 (per the product definition): direct social publishing,
 full CRM replacement, deep HighLevel sync, client portal, AI agents running

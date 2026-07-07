@@ -62,7 +62,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .rail button.nav .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
 .rail button.nav .cnt{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--rail-ink-dim)}
 .rail button.nav.active .cnt{color:var(--rail-accent)}
-.rail .sub{padding-left:30px;font-size:12.5px}
+.rail-sep{height:1px;background:var(--rail-2);margin:9px 16px}
 
 /* ---------- main / topbar ---------- */
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -80,6 +80,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .btn-ghost:hover{border-color:var(--accent-line);color:var(--ink)}
 .iconbtn{position:relative;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:grid;place-items:center}
 .iconbtn .bubble{position:absolute;top:-5px;right:-5px;background:var(--crit);color:#fff;font-family:var(--mono);font-size:9.5px;border-radius:8px;padding:0 4px;line-height:14px}
+
+/* ---------- subnav ---------- */
+.subnav{position:sticky;top:55px;z-index:35;display:flex;gap:4px;flex-wrap:wrap;padding:8px 24px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.subnav button{padding:4.5px 12px;border-radius:7px;font-size:12.5px;color:var(--ink-2);border:1px solid transparent}
+.subnav button:hover{color:var(--ink);background:var(--surface-2)}
+.subnav button.on{background:var(--surface);border-color:var(--line);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+.subnav button .n{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-left:5px}
 
 /* ---------- views ---------- */
 .view{display:none;padding:22px 24px 60px;max-width:1240px;width:100%;margin:0 auto}
@@ -238,7 +245,8 @@ table.data .num{font-variant-numeric:tabular-nums}
   .rail-h{display:none}
   .rail button.nav{width:auto;white-space:nowrap;border-left:none;border-bottom:2px solid transparent;border-radius:6px;padding:5px 10px}
   .rail button.nav.active{border-bottom-color:var(--rail-accent)}
-  .rail .sub{padding-left:10px}
+  .rail-sep{display:none}
+  .subnav{position:static}
   .rail-logo{padding:0 10px 0 4px}
   .rail-logo .word{display:none}
   .cal{grid-template-columns:repeat(7,150px)}
@@ -255,46 +263,25 @@ table.data .num{font-variant-numeric:tabular-nums}
   <div class="rail-logo"><span class="mark">B/</span><span class="word">BRANDS OS</span></div>
 
   <div class="rail-group">
-    <div class="rail-h">Command</div>
-    <button class="nav" data-view="command"><span class="dot" style="background:var(--rail-accent)"></span>Command Center</button>
-    <button class="nav" data-view="today">Today <span class="cnt">9</span></button>
-    <button class="nav" data-view="attention">Needs Attention <span class="cnt">11</span></button>
-    <button class="nav" data-view="inbox">Inbox <span class="cnt">7</span></button>
+    <button class="nav" data-section="command" data-view="command"><span class="dot" style="background:var(--rail-accent)"></span>Command Center <span class="cnt">11</span></button>
+    <button class="nav" data-section="brands" data-view="brands">Brands <span class="cnt">10</span></button>
   </div>
 
-  <div class="rail-group">
-    <div class="rail-h">Brands</div>
-    <button class="nav" data-view="brands">All Brands <span class="cnt">10</span></button>
-    <button class="nav sub" data-view="hq" data-brand="social">GHL Social</button>
-    <button class="nav sub" data-view="hq" data-brand="sites">GHL Sites</button>
-    <button class="nav sub" data-view="hq" data-brand="onboard">GHL Onboard</button>
-    <button class="nav sub" data-view="hq" data-brand="admins">GHL Admins</button>
-    <button class="nav sub" data-view="hq" data-brand="video">GHL Video</button>
-  </div>
+  <div class="rail-sep" role="presentation"></div>
 
   <div class="rail-group">
-    <div class="rail-h">Operations</div>
-    <button class="nav" data-view="tasks">Tasks <span class="cnt">47</span></button>
-    <button class="nav" data-view="campaigns">Campaigns <span class="cnt">12</span></button>
-    <button class="nav" data-view="content">Content <span class="cnt">32</span></button>
-    <button class="nav" data-view="social">Social Calendar</button>
-    <button class="nav" data-view="assets">Assets</button>
-    <button class="nav" data-view="notes">Notes &amp; Decisions</button>
+    <button class="nav" data-section="tasks" data-view="tasks">Tasks <span class="cnt">47</span></button>
+    <button class="nav" data-section="campaigns" data-view="campaigns">Campaigns <span class="cnt">12</span></button>
+    <button class="nav" data-section="content" data-view="content">Content <span class="cnt">32</span></button>
   </div>
 
-  <div class="rail-group">
-    <div class="rail-h">Business</div>
-    <button class="nav" data-view="offers">Offers</button>
-    <button class="nav" data-view="crm">CRM Light</button>
-    <button class="nav" data-view="clients">Clients <span class="cnt">14</span></button>
-    <button class="nav" data-view="support">Support <span class="cnt">5</span></button>
-  </div>
+  <div class="rail-sep" role="presentation"></div>
 
   <div class="rail-group">
-    <div class="rail-h">System</div>
-    <button class="nav" data-view="reports">Reports</button>
-    <button class="nav" data-view="automations">Automations</button>
-    <button class="nav" data-view="settings">Settings</button>
+    <button class="nav" data-section="business" data-view="offers">Business</button>
+    <button class="nav" data-section="library" data-view="assets">Library</button>
+    <button class="nav" data-section="reports" data-view="reports">Reports</button>
+    <button class="nav" data-section="system" data-view="automations">System</button>
   </div>
 </aside>
 
@@ -307,6 +294,7 @@ table.data .num{font-variant-numeric:tabular-nums}
     <button class="iconbtn" aria-label="Notifications, 3 unread">🔔<span class="bubble">3</span></button>
     <button class="iconbtn" aria-label="Account: Dillon"><span class="avatar" style="width:22px;height:22px;font-size:9px">DL</span></button>
   </header>
+  <nav class="subnav" id="subnav" hidden aria-label="Section pages"></nav>
 
   <!-- ============ COMMAND CENTER ============ -->
   <section class="view active" id="view-command">
@@ -1176,21 +1164,59 @@ table.data .num{font-variant-numeric:tabular-nums}
   };
   var TIER = {good:["Green","p-good"], warn:["Yellow","p-warn"], crit:["Red","p-crit"]};
 
+  // consolidated nav: each rail item is a section; sections with >1 page get a subnav strip
+  var SECTIONS = {
+    command:  {crumb:"Command",  views:[["command","Overview"],["today","Today","9"],["attention","Needs Attention","11"],["inbox","Inbox","7"]]},
+    brands:   {crumb:"Brands",   views:[["brands","Directory"]]},
+    tasks:    {crumb:"Tasks",    views:[["tasks","Tasks"]]},
+    campaigns:{crumb:"Campaigns",views:[["campaigns","Campaigns"]]},
+    content:  {crumb:"Content",  views:[["content","Pipeline"],["social","Social Calendar"]]},
+    business: {crumb:"Business", views:[["offers","Offers"],["crm","CRM Light"],["clients","Clients","14"],["support","Support","5"]]},
+    library:  {crumb:"Library",  views:[["assets","Assets"],["notes","Notes & Decisions"]]},
+    reports:  {crumb:"Reports",  views:[["reports","Reports"]]},
+    system:   {crumb:"System",   views:[["automations","Automations"],["settings","Settings & Roles"]]}
+  };
+  var VIEW2SEC = {hq:"brands"};
+  Object.keys(SECTIONS).forEach(function(sec){
+    SECTIONS[sec].views.forEach(function(v){ VIEW2SEC[v[0]] = sec; });
+  });
+  var VIEWLABEL = {};
+  Object.keys(SECTIONS).forEach(function(sec){
+    SECTIONS[sec].views.forEach(function(v){ VIEWLABEL[v[0]] = v[1]; });
+  });
+
   var views = document.querySelectorAll(".view");
   var navBtns = document.querySelectorAll(".rail .nav");
   var crumb = document.getElementById("crumb");
-  var LABEL = {command:"Command Center",today:"Command · Today",attention:"Command · Needs Attention",inbox:"Command · Inbox",brands:"Brands",hq:"Brand HQ",tasks:"Operations · Tasks",campaigns:"Operations · Campaigns",content:"Operations · Content",social:"Operations · Social",assets:"Operations · Assets",notes:"Operations · Notes",offers:"Business · Offers",crm:"Business · CRM Light",clients:"Business · Clients",support:"Business · Support",reports:"Reporting",automations:"System · Automations",settings:"System · Settings"};
+  var subnav = document.getElementById("subnav");
+  var curBrand = "social";
 
   function go(view, brand){
+    if (view === "hq" && brand) curBrand = brand;
+    var sec = VIEW2SEC[view] || "command";
     views.forEach(function(v){ v.classList.toggle("active", v.id === "view-"+view); });
-    navBtns.forEach(function(b){
-      var on = b.dataset.view === view && (view !== "hq" || b.dataset.brand === brand || (!brand && !b.dataset.brand));
-      if (view === "hq" && !brand) on = false;
-      b.classList.toggle("active", on);
-    });
-    if (view === "hq") setBrand(brand || "social");
-    crumb.textContent = LABEL[view] || "Brands OS";
+    navBtns.forEach(function(b){ b.classList.toggle("active", b.dataset.section === sec); });
+    renderSubnav(sec, view);
+    if (view === "hq") setBrand(curBrand);
+    crumb.textContent = SECTIONS[sec].crumb + (view === "hq" ? " · " + BRANDS[curBrand].name :
+      (SECTIONS[sec].views.length > 1 ? " · " + VIEWLABEL[view] : ""));
     window.scrollTo(0,0);
+  }
+
+  function renderSubnav(sec, view){
+    var entries = SECTIONS[sec].views.slice();
+    if (sec === "brands" && view === "hq") entries.push(["hq", BRANDS[curBrand].name + " HQ"]);
+    if (entries.length < 2){ subnav.hidden = true; subnav.innerHTML = ""; return; }
+    subnav.hidden = false;
+    subnav.innerHTML = "";
+    entries.forEach(function(v){
+      var b = document.createElement("button");
+      b.dataset.view = v[0];
+      if (v[0] === "hq") b.dataset.brand = curBrand;
+      b.innerHTML = v[1] + (v[2] ? '<span class="n">'+v[2]+'</span>' : '');
+      b.classList.toggle("on", v[0] === view);
+      subnav.appendChild(b);
+    });
   }
 
   function setBrand(key){
@@ -1204,7 +1230,6 @@ table.data .num{font-variant-numeric:tabular-nums}
     h.textContent = TIER[b.tier][0] + " · " + b.health + "%";
     h.className = "pill " + TIER[b.tier][1];
     document.getElementById("hq-samplenote").style.display = b.sample ? "block" : "none";
-    crumb.textContent = "Brand HQ · " + b.name;
   }
 
   // brand directory cards
