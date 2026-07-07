@@ -68,10 +68,23 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:10px 24px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
 .crumb{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;white-space:nowrap}
-.search{flex:1;max-width:440px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;color:var(--ink-3)}
+.search{flex:1;max-width:440px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;color:var(--ink-3);position:relative}
 .search input{border:none;background:none;flex:1;color:var(--ink);font-family:inherit;font-size:13px}
 .search input::placeholder{color:var(--ink-3)}
 .search kbd{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink-3)}
+.sresults{position:absolute;top:calc(100% + 6px);left:-1px;right:-1px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 34px rgba(0,0,0,.18);z-index:70;max-height:320px;overflow-y:auto;padding:4px}
+.sresults button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 10px;border-radius:7px;font-size:13px;color:var(--ink)}
+.sresults button:hover,.sresults button:first-child{background:var(--surface-2)}
+.sresults .k{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:auto;flex:none}
+.sresults .empty{padding:10px 12px;font-size:12.5px;color:var(--ink-3)}
+.notif{position:relative}
+.npanel{position:absolute;right:0;top:calc(100% + 8px);width:308px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.18);z-index:70;padding:5px}
+.npanel button{display:block;width:100%;text-align:left;padding:8px 11px;border-radius:8px}
+.npanel button:hover{background:var(--surface-2)}
+.npanel button b{display:block;font-size:12.5px}
+.npanel button span{display:block;font-size:11.5px;color:var(--ink-3)}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,10px);background:var(--rail);color:#fff;border:1px solid var(--rail-2);padding:9px 16px;border-radius:10px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:200;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 .topbar .spacer{flex:1}
 .btn{display:inline-flex;align-items:center;gap:7px;border-radius:8px;padding:7px 14px;font-weight:600;font-size:13px}
 .btn-accent{background:var(--accent);color:var(--accent-ink)}
@@ -288,10 +301,17 @@ table.data .num{font-variant-numeric:tabular-nums}
 <div class="main">
   <header class="topbar">
     <span class="crumb" id="crumb">Command Center</span>
-    <div class="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search brands, tasks, campaigns, offers…" aria-label="Search"><kbd>/</kbd></div>
+    <div class="search"><span aria-hidden="true">⌕</span><input type="search" id="searchbox" placeholder="Search brands, tasks, campaigns, offers…" aria-label="Search" autocomplete="off"><kbd>/</kbd><div class="sresults" id="sresults" hidden></div></div>
     <span class="spacer"></span>
     <button class="btn btn-accent" id="quickadd-open">+ Quick Add</button>
-    <button class="iconbtn" aria-label="Notifications, 3 unread">🔔<span class="bubble">3</span></button>
+    <div class="notif">
+      <button class="iconbtn" id="notif-btn" aria-label="Notifications, 3 unread" aria-expanded="false">🔔<span class="bubble" id="notif-bubble">3</span></button>
+      <div class="npanel" id="npanel" hidden>
+        <button data-view="attention"><b>4 posts overdue</b><span>GHL Social · Real Estate Social Offer</span></button>
+        <button data-view="offers"><b>Offer updated: Custom Social</b><span>4 items flagged with old pricing copy</span></button>
+        <button data-view="support"><b>New ticket: wrong logo on posts</b><span>Rivera Realty · high priority</span></button>
+      </div>
+    </div>
     <button class="iconbtn" aria-label="Account: Dillon"><span class="avatar" style="width:22px;height:22px;font-size:9px">DL</span></button>
   </header>
   <nav class="subnav" id="subnav" hidden aria-label="Section pages"></nav>
@@ -1148,6 +1168,7 @@ table.data .num{font-variant-numeric:tabular-nums}
     </div>
   </div>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
   var BRANDS = {
@@ -1192,7 +1213,10 @@ table.data .num{font-variant-numeric:tabular-nums}
   var curBrand = "social";
 
   function go(view, brand){
-    if (view === "hq" && brand) curBrand = brand;
+    if (view === "hq" && brand){
+      if (brand !== curBrand) resetTabs("hq", "hq-overview");
+      curBrand = brand;
+    }
     var sec = VIEW2SEC[view] || "command";
     views.forEach(function(v){ v.classList.toggle("active", v.id === "view-"+view); });
     navBtns.forEach(function(b){ b.classList.toggle("active", b.dataset.section === sec); });
@@ -1249,10 +1273,90 @@ table.data .num{font-variant-numeric:tabular-nums}
     grid.appendChild(el);
   });
 
-  // any element with data-view navigates
+  // any element with data-view navigates; clicks also close popovers
   document.addEventListener("click", function(e){
     var el = e.target.closest("[data-view]");
     if (el) go(el.dataset.view, el.dataset.brand);
+    if (el || !e.target.closest(".search")) hideResults();
+    if (el || !e.target.closest(".notif")) closeNotif();
+  });
+
+  // toast
+  var toast = document.getElementById("toast"), toastTimer;
+  function say(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2400);
+  }
+
+  function resetTabs(group, first){
+    document.querySelectorAll('.tabs[data-group="'+group+'"] button').forEach(function(b){ b.classList.toggle("on", b.dataset.pane === first); });
+    document.querySelectorAll('.tabpane[data-group="'+group+'"]').forEach(function(p){ p.classList.toggle("on", p.id === first); });
+  }
+
+  // search — small index across views, brands, and sample records
+  var INDEX = [];
+  Object.keys(SECTIONS).forEach(function(sec){
+    SECTIONS[sec].views.forEach(function(v){ INDEX.push({t:v[1], k:"Page", v:v[0]}); });
+  });
+  Object.keys(BRANDS).forEach(function(k){ INDEX.push({t:BRANDS[k].name, k:"Brand", v:"hq", b:k}); });
+  [["5 Posts for $99 Promo","Campaign","campaigns"],["July SaaS Promo","Campaign","campaigns"],
+   ["Real Estate Social Offer","Campaign","campaigns"],["Reseller Push","Campaign","campaigns"],
+   ["Social Standard","Offer","offers"],["Custom Social","Offer","offers"],["Reels Add-On","Offer","offers"],
+   ["Rivera Realty","Client","clients"],["Beacon Home Co","Client","clients"],["Copper Kettle Café","Client","clients"],
+   ["Finish SaaS email sequence","Task","tasks"],["Write cold email sequence","Task","tasks"],
+   ["Real Estate Offer Carousel","Content","content"],["SOP: Client Content Approval","Asset","assets"],
+   ["Decision: two primary plans","Decision","notes"]
+  ].forEach(function(r){ INDEX.push({t:r[0], k:r[1], v:r[2]}); });
+
+  var sbox = document.getElementById("searchbox");
+  var sres = document.getElementById("sresults");
+  function hideResults(){ sres.hidden = true; }
+  sbox.addEventListener("input", function(){
+    var q = sbox.value.trim().toLowerCase();
+    if (!q){ hideResults(); return; }
+    var hits = INDEX.filter(function(r){ return r.t.toLowerCase().indexOf(q) > -1; }).slice(0, 7);
+    sres.innerHTML = hits.length ? "" : '<div class="empty">No matches — try a brand, campaign, or client name</div>';
+    hits.forEach(function(r){
+      var b = document.createElement("button");
+      b.dataset.view = r.v;
+      if (r.b) b.dataset.brand = r.b;
+      b.innerHTML = r.t + '<span class="k">' + r.k + '</span>';
+      sres.appendChild(b);
+    });
+    sres.hidden = false;
+  });
+  sbox.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !sres.hidden){
+      var first = sres.querySelector("button");
+      if (first) first.click();
+      sbox.value = ""; sbox.blur();
+    }
+    if (e.key === "Escape"){ hideResults(); sbox.blur(); }
+  });
+
+  // notifications
+  var npanel = document.getElementById("npanel");
+  var nbtn = document.getElementById("notif-btn");
+  function closeNotif(){ npanel.hidden = true; nbtn.setAttribute("aria-expanded","false"); }
+  nbtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    npanel.hidden = !npanel.hidden;
+    nbtn.setAttribute("aria-expanded", String(!npanel.hidden));
+    if (!npanel.hidden) document.getElementById("notif-bubble").style.display = "none";
+  });
+
+  // inbox: processing an item converts it and clears it from the list
+  document.querySelectorAll("#view-inbox .row").forEach(function(row){
+    row.querySelectorAll(".chip").forEach(function(ch){
+      ch.addEventListener("click", function(){
+        say("Processed into " + ch.textContent.replace("→","").trim() + " — brand, owner, and due date asked on the way in");
+        row.style.transition = "opacity .25s";
+        row.style.opacity = "0";
+        setTimeout(function(){ row.remove(); }, 260);
+      });
+    });
   });
 
   // tab groups
@@ -1288,7 +1392,14 @@ table.data .num{font-variant-numeric:tabular-nums}
   });
   function closeQA(){ scrim.classList.remove("open"); }
   document.getElementById("qa-cancel").addEventListener("click", closeQA);
-  document.getElementById("qa-save").addEventListener("click", closeQA);
+  document.getElementById("qa-save").addEventListener("click", function(){
+    var type = document.querySelector("#qa-types .chip.on");
+    var what = document.getElementById("qa-what").value.trim();
+    var brand = document.getElementById("qa-brand").value;
+    say("Added " + (type ? type.textContent : "item") + (what ? " “" + what + "”" : "") + " → " + brand);
+    document.getElementById("qa-what").value = "";
+    closeQA();
+  });
   scrim.addEventListener("click", function(e){ if (e.target === scrim) closeQA(); });
   document.addEventListener("keydown", function(e){
     if (e.key === "Escape") closeQA();
