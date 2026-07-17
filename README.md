@@ -6,6 +6,11 @@ priority across GHL Brands.
 
 Open `index.html` in any browser — no build step, no dependencies, fully self-contained.
 
+See [`docs/offer-framework.md`](docs/offer-framework.md) for the internal offer
+framework — company, market, buyer definitions, and the complete offer
+formula for each service (GHL Audit, GHL Onboard, GHL Help Desk, GHL
+Engineers, GHL Accelerator, Custom Projects).
+
 ## The core idea
 
 **One record, many views.** A task exists once, with fields (Brand, Campaign, Type,
